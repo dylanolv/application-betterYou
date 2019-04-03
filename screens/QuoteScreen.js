@@ -1,10 +1,9 @@
 import React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import { MonoText } from "../components/StyledText";
+import { View, ScrollView, StyleSheet } from "react-native";
 
-export default class HomeScreen extends React.Component {
+export default class QuoteScreen extends React.Component {
   static navigationOptions = {
-    title: "Home"
+    title: "Quotes"
   };
 
   render() {
@@ -22,9 +21,7 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 15,
     backgroundColor: "#fff"
-  },
-  contentContainer: {
-    paddingTop: 30
   }
 });
