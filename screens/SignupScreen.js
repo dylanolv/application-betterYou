@@ -3,7 +3,7 @@ import { Header, Title, Container, Content, List, ListItem, InputGroup, Input, I
 import React, {Component} from 'react';
 import * as firebase from 'firebase';
 
-export default class Signup extends Component {
+export default class SignupScreen extends Component {
     static navigationOptions = {
       title: "Signup"
     };
@@ -46,6 +46,7 @@ export default class Signup extends Component {
             console.log(displayName);
           }, function(error) {
             // An error happened.
+            console.log(error);
           });     
         }
     });
@@ -99,9 +100,6 @@ export default class Signup extends Component {
             );
             return (
                 <Container>
-                    {/* <Header>
-                        <Title>Sign Up</Title>
-                    </Header> */}
                     {content}
                 </Container>
             );
