@@ -11,25 +11,25 @@ import {
   Label
 } from "native-base";
 
-firebase.initializeApp({
-  apiKey: "AIzaSyC5eEj4GDdNByeljnixIhkfE2iKKfQBEeI",
-  authDomain: "betteryou-5e5bb.firebaseapp.com",
-  databaseURL: "https://betteryou-5e5bb.firebaseio.com",
-  projectId: "betteryou-5e5bb",
-  storageBucket: "betteryou-5e5bb.appspot.com",
-  messagingSenderId: "916847466152"
-});
+// firebase.initializeApp({
+//   apiKey: "AIzaSyC5eEj4GDdNByeljnixIhkfE2iKKfQBEeI",
+//   authDomain: "betteryou-5e5bb.firebaseapp.com",
+//   databaseURL: "https://betteryou-5e5bb.firebaseio.com",
+//   projectId: "betteryou-5e5bb",
+//   storageBucket: "betteryou-5e5bb.appspot.com",
+//   messagingSenderId: "916847466152"
+// });
 
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { email: "", password: "", error: "", loading: false };
+    this.state = { username: "", email: "", password: "", error: "", loading: false };
   }
 
   onLoginPress() {
     this.setState({ error: "", loading: true });
 
-    const { email, password } = this.state;
+    const { username, email, password } = this.state;
 
     firebase
       .auth()
@@ -45,12 +45,19 @@ export default class LoginScreen extends React.Component {
         console.log(errorMessage);
         // ...
       });
+
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          var displayName = user.displayName;
+          console.log(displayName);
+        }
+      });
   }
 
   onSignUpPress() {
     this.setState({ error: "", loading: true });
 
-    const { email, password } = this.state;
+    const { username, email, password } = this.state;
 
     firebase
       .auth()
@@ -61,6 +68,21 @@ export default class LoginScreen extends React.Component {
       })
       .catch(() => {
         this.setState({ error: "Inscription failed", loading: false });
+      });
+
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+           // Updates the user attributes:
+          user.updateProfile({ // <-- Update Method here
+            displayName: username
+          }).then(function() {
+            // Profile updated successfully!
+            var displayName = user.displayName;
+            console.log(displayName);
+          }, function(error) {
+            // An error happened.
+          });     
+        }
       });
   }
 
@@ -85,6 +107,15 @@ export default class LoginScreen extends React.Component {
       <Container style={styles.container}>
         <Content>
           <View>
+
+            <Item stackedLabel>
+              <Label>Username</Label>
+              <Input
+                onChangeText={username => this.setState({ username })}
+                placeholder="Username"
+              />
+            </Item>
+            
             <Item stackedLabel>
               <Label>E-mail</Label>
               <Input
@@ -105,6 +136,7 @@ export default class LoginScreen extends React.Component {
             <Text>{this.state.error}</Text>
 
             {this.renderButtonOrLoading()}
+
           </View>
         </Content>
       </Container>

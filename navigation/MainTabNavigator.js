@@ -6,6 +6,45 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import QuoteScreen from '../screens/QuoteScreen';
 import LoginScreen from '../screens/LoginScreen';
+import Login from '../screens/Login';
+import Signup from '../screens/Signup';
+
+const Login2Stack = createStackNavigator({
+  Login: Login,
+});
+
+Login2Stack.navigationOptions = {
+  tabBarLabel: 'Login',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
+const SignupStack = createStackNavigator({
+  Signup: Signup,
+});
+
+SignupStack.navigationOptions = {
+  tabBarLabel: 'Signup',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
 
 const LoginStack = createStackNavigator({
   Login: LoginScreen,
@@ -58,6 +97,8 @@ QuoteStack.navigationOptions = {
 };
 
 export default createBottomTabNavigator({
+  Login2Stack,
+  SignupStack,
   LoginStack,
   HomeStack,
   QuoteStack
