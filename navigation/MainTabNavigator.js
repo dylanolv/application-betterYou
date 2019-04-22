@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import QuoteScreen from '../screens/QuoteScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
+import AccountScreen from '../screens/AccountScreen';
 
 const LoginStack = createStackNavigator({
   Login: LoginScreen,
@@ -32,6 +33,24 @@ const SignupStack = createStackNavigator({
 
 SignupStack.navigationOptions = {
   tabBarLabel: 'Signup',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
+const AccountStack = createStackNavigator({
+  Account: AccountScreen,
+});
+
+AccountStack.navigationOptions = {
+  tabBarLabel: 'Account',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -71,7 +90,11 @@ QuoteStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
     />
   ),
 };
@@ -79,6 +102,7 @@ QuoteStack.navigationOptions = {
 export default createBottomTabNavigator({
   LoginStack,
   SignupStack,
+  AccountStack,
   HomeStack,
   QuoteStack
 });
