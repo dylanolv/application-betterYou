@@ -61,15 +61,15 @@ export default class QuoteScreen extends Component {
         //   <Text>{this.state.items.author}</Text>
         //   <Text>{this.state.items.content}</Text>
         // </View>
-        <Container>
+        <Container style={[styles.container, styles.horizontal]}>
         <Content padder>
           <Card>
             <CardItem bordered>
               <Body>
-                  <Text>{this.state.items.author}</Text>
-                  <Icon name='md-quote' style={[styles.iconQuote, styles.iconQuoteFlip]}/>
-                  <Text>{this.state.items.content}</Text>
-                  <Icon name='md-quote' style={[styles.iconQuote, styles.iconQuoteRotate]}/>
+                <Icon name='md-quote' style={[styles.iconQuote, styles.iconQuote1]}/>
+                <Text style={[styles.content]}>{this.state.items.content}</Text>
+                <Icon name='md-quote' style={[styles.iconQuote, styles.iconQuote2]}/>
+                <Text style={[styles.author]}>{this.state.items.author}</Text>
               </Body>
             </CardItem>
           </Card>
@@ -82,18 +82,41 @@ export default class QuoteScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: 'center',
     flex: 1,
-    padding: 20,
-    justifyContent: "center"
+    justifyContent: 'center'
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10
   },
   iconQuote: {
     fontSize: 60,
-    color: '#0000ff'
+    color: '#008ba3',
+    padding: 20
   },
-  iconQuoteRotate: {
-    transform: [{ rotate: '180deg'}]
+  iconQuote1: {
+    transform: [
+      { rotate: '180deg' }
+    ],
+    alignSelf: 'flex-start'
   },
-  iconQuoteFlip: {
-    transform: [{ scaleX: -1}]
+  iconQuote2: {
+    transform: [
+      { rotate: '180deg' },
+      { scaleX: -1 }
+    ],
+    alignSelf: 'flex-end'
+  },
+  author: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    alignSelf: 'center'
+  },
+  content: {
+    fontSize: 16,
+    alignSelf: 'center',
+    textAlign: 'center'
   }
 });

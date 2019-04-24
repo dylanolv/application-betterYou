@@ -1,7 +1,6 @@
 import React from "react";
 import { AsyncStorage, View, ActivityIndicator, StyleSheet, ScrollView } from "react-native";
 import { Header, Container, Title, Content, List, ListItem, InputGroup, Input, Icon, Text, Button } from "native-base";
-import { MonoText } from "../components/StyledText";
 import * as firebase from "firebase";
 
 export default class AccountScreen extends React.Component {
