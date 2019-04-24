@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Center, Right, Body } from 'native-base';
+import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Center, Right, Body, Fab } from 'native-base';
 import { MonoText } from "../components/StyledText";
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     title: "Home"
   };
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      active: 'false'
+    };
+  }
 
   render() {
     return (
@@ -48,11 +55,25 @@ export default class HomeScreen extends React.Component {
                   <Text>20</Text>
                 </Button>
             </CardItem>
-            <CardItem style={{justifyContent: 'center'}}>
-                <Button transparent bordered>
-                  <Icon name='md-share' style={{fontSize: 40}}/>
-                  <Text>Partager</Text>
-                </Button>
+            <CardItem>
+                <Fab
+                active={!this.state.active}
+                direction="up"
+                containerStyle={{ }}
+                style={{ backgroundColor: '#5067FF' }}
+                position="bottomRight"
+                onPress={() => this.setState({ active: !this.state.active })}>
+                  <Icon name="share" />
+                  <Button style={{ backgroundColor: '#34A34F' }}>
+                    <Icon name="logo-whatsapp" />
+                  </Button>
+                  <Button style={{ backgroundColor: '#3B5998' }}>
+                    <Icon name="logo-facebook" />
+                  </Button>
+                  <Button disabled style={{ backgroundColor: '#DD5144' }}>
+                    <Icon name="mail" />
+                  </Button>
+                </Fab>
                 <Button transparent bordered>
                   <Icon name='md-chatboxes' style={{fontSize: 40}}/>
                   <Text>Commenter</Text>

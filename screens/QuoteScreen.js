@@ -1,6 +1,17 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import * as firebase from "firebase";
+
+// To hide the yellowbox
+import { YellowBox } from 'react-native';
+import _ from 'lodash';
+YellowBox.ignoreWarnings(['Setting a timer']);
+const _console = _.clone(console);
+console.warn = message => {
+  if (message.indexOf('Setting a timer') <= -1) {
+    _console.warn(message);
+  }
+};
 
 export default class QuoteScreen extends Component {
   static navigationOptions = {
@@ -16,7 +27,7 @@ export default class QuoteScreen extends Component {
     firebase
       .database()
       .ref("quotes/")
-      .once("value", snapshot => {
+      .on("value", snapshot => {
         let childData = [];
         let i = 0;
 
@@ -27,7 +38,7 @@ export default class QuoteScreen extends Component {
 
         let RandomNumber = Math.floor(Math.random() * i) + 1;
         quoteSelected = childData[RandomNumber];
-        this.setState({ loadin: false, items: quoteSelected });
+        this.setState({ loading: false, items: quoteSelected });
       });
   }
 
@@ -36,12 +47,21 @@ export default class QuoteScreen extends Component {
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        <Text>{this.state.items.author}</Text>
-        <Text>{this.state.items.content}</Text>
-      </View>
-    );
+    if (this.state.loading) {
+      return (
+        <View style={[styles.container, styles.horizontal]}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )
+    }
+    else {
+      return (
+        <View style={styles.container}>
+          <Text>{this.state.items.author}</Text>
+          <Text>{this.state.items.content}</Text>
+        </View>
+      );
+    }
   }
 }
 
