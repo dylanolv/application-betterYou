@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { View, StyleSheet, ActivityIndicator } from "react-native";
+import { Container, Content, Card, CardItem, Text, Icon, Body } from 'native-base';
 import * as firebase from "firebase";
 
 // To hide the yellowbox
@@ -56,10 +57,24 @@ export default class QuoteScreen extends Component {
     }
     else {
       return (
-        <View style={styles.container}>
-          <Text>{this.state.items.author}</Text>
-          <Text>{this.state.items.content}</Text>
-        </View>
+        // <View style={styles.container}>
+        //   <Text>{this.state.items.author}</Text>
+        //   <Text>{this.state.items.content}</Text>
+        // </View>
+        <Container>
+        <Content padder>
+          <Card>
+            <CardItem bordered>
+              <Body>
+                  <Text>{this.state.items.author}</Text>
+                  <Icon name='md-quote' style={[styles.iconQuote, styles.iconQuoteFlip]}/>
+                  <Text>{this.state.items.content}</Text>
+                  <Icon name='md-quote' style={[styles.iconQuote, styles.iconQuoteRotate]}/>
+              </Body>
+            </CardItem>
+          </Card>
+        </Content>
+        </Container>
       );
     }
   }
@@ -70,5 +85,15 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     justifyContent: "center"
+  },
+  iconQuote: {
+    fontSize: 60,
+    color: '#0000ff'
+  },
+  iconQuoteRotate: {
+    transform: [{ rotate: '180deg'}]
+  },
+  iconQuoteFlip: {
+    transform: [{ scaleX: -1}]
   }
 });
