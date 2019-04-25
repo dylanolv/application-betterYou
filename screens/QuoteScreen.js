@@ -62,9 +62,9 @@ export default class QuoteScreen extends Component {
           <Card>
             <CardItem bordered>
               <Body>
-                <Icon name='md-quote' style={[styles.iconQuote, styles.iconQuote1]}/>
+                <Icon name='quote' style={[styles.iconQuote, styles.iconQuote1]}/>
                 <Text style={[styles.content]}>{this.state.items.content}</Text>
-                <Icon name='md-quote' style={[styles.iconQuote, styles.iconQuote2]}/>
+                <Icon name='quote' style={[styles.iconQuote, styles.iconQuote2]}/>
                 <Text style={[styles.author]}>{this.state.items.author}</Text>
               </Body>
             </CardItem> 
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   iconQuote1: {
     transform: [
-      { rotate: '180deg' }
+      { scaleX: -1 }
     ],
     alignSelf: 'flex-start'
   },
