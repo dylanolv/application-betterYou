@@ -12,8 +12,13 @@ export default class HomeScreen extends React.Component {
     this.state = {
       active: 'false',
       upBtnSelected: false,
-      downBtnSelected: false
+      downBtnSelected: false,
+      starSelected: false
     };
+  }
+
+  onPressStar() {
+    this.setState({ starSelected: !this.state.starSelected })
   }
 
   onPressUp() {
@@ -36,11 +41,14 @@ export default class HomeScreen extends React.Component {
                   <Text>Titre Découverte</Text>
                 </Body>
               </Left>
+              <TouchableOpacity style={[styles.star]}>
+                <Icon style={[styles.iconStar]} name={(this.state.starSelected == true)?'star':'star-outline'} onPress={this.onPressStar.bind(this)}/>
+              </TouchableOpacity>
             </CardItem>
             <CardItem>
               <Body>
-                <Image source={require('../assets/images/discovery-image1.jpg')} style={{flex: 1, resizeMode: 'cover', height: 200, width: 370}}/>
-                <Text style={{paddingTop: 10}}>
+                <Image source={require('../assets/images/discovery-image1.jpg')} style={[styles.img]}/>
+                <Text style={[styles.txt]}>
                   Nulla tempus ac urna vel pellentesque. Nullam imperdiet dictum ultricies. 
                   Suspendisse in nisl nec orci accumsan tincidunt. Nullam at erat lacus. 
                   In in lectus in libero ornare consequat. Phasellus tempor nisl vulputate urna ullamcorper.
@@ -88,6 +96,22 @@ const styles = StyleSheet.create({
   },
   moreTxt: {
     textDecorationLine: 'underline'
+  },
+  img: {
+    flex: 1, 
+    resizeMode: 'cover', 
+    height: 200, 
+    width: 370
+  },
+  txt: {
+    paddingTop: 10
+  },
+  star: {
+    alignSelf: 'flex-end'
+  },
+  iconStar: {
+    fontSize: 40,
+    color: '#67BBF2'
   },
   btnSelected: {
     backgroundColor: '#67BBF2',
