@@ -10,7 +10,9 @@ export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      active: 'false'
+      active: 'false',
+      upBtnSelected: false,
+      downBtnSelected: false
     };
   }
 
@@ -41,23 +43,23 @@ export default class HomeScreen extends React.Component {
               </Body>
             </CardItem>
             <CardItem style={{justifyContent: 'center'}}>
-                <Button style={{backgroundColor: '#67BBF2', margin: 7}}>
-                  <Icon name='trending-up' style={{fontSize: 40}}/>
-                  <Text>470</Text>
+                <Button style={[(this.state.upBtnSelected == true)?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={() => this.setState({ upBtnSelected: !this.state.upBtnSelected })}>
+                  <Icon style={(this.state.upBtnSelected == true)?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-up'/>
+                  <Text style={(this.state.upBtnSelected == true)?styles.txtBtnSelected:styles.txtBtnNotSelected}>470</Text>
                 </Button>
-                <Button transparent bordered style={{borderColor: '#67BBF2', margin: 7}}>
-                  <Icon name='trending-down' style={{color: '#67BBF2', fontSize: 40}}/>
-                  <Text style={{color: '#67BBF2', fontWeight: 'bold'}}>20</Text>
+                <Button style={[(this.state.downBtnSelected == true)?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={() => this.setState({ downBtnSelected: !this.state.downBtnSelected })}>
+                  <Icon style={(this.state.downBtnSelected == true)?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-up'/>
+                  <Text style={(this.state.downBtnSelected == true)?styles.txtBtnSelected:styles.txtBtnNotSelected}>470</Text>
                 </Button>
             </CardItem>
             <CardItem style={{justifyContent: 'center'}}>
-              <Button transparent bordered style={{borderColor: '#67BBF2', margin: 5}}>
-                <Icon name='share' style={{color: '#67BBF2', fontSize: 40}}/>
-                <Text style={{color: '#67BBF2', fontWeight: 'bold'}}>Partager</Text>
+              <Button style={[styles.btnSelected, styles.margin5]}>
+                <Icon name='share' style={[styles.iconBtnSelected]}/>
+                <Text style={[styles.txtBtnSelected]}>Partager</Text>
               </Button>
-              <Button transparent bordered style={{borderColor: '#67BBF2', margin: 5}}>
-                <Icon name='chatboxes' style={{color: '#67BBF2', fontSize: 40}}/>
-                <Text style={{color: '#67BBF2', fontWeight: 'bold'}}>Commenter</Text>
+              <Button style={[styles.btnSelected, styles.margin5]}>
+                <Icon name='chatboxes' style={[styles.iconBtnSelected]}/>
+                <Text style={[styles.txtBtnSelected]}>Commenter</Text>
               </Button>
                 {/* <Fab
                 active={!this.state.active}
@@ -99,5 +101,37 @@ const styles = StyleSheet.create({
   },
   more: {
     alignSelf: 'flex-end'
+  },
+  btnSelected: {
+    backgroundColor: '#67BBF2',
+    borderWidth: 1,
+    borderColor: '#67BBF2'
+  },
+  btnNotSelected: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: '#67BBF2'
+  },
+  iconBtnSelected: {
+    fontSize: 40,
+    color: '#FFFFFF'
+  },
+  iconBtnNotSelected: {
+    fontSize: 40,
+    color: '#67BBF2'
+  },
+  txtBtnSelected: {
+    fontWeight: 'bold',
+    color: '#FFFFFF'
+  },
+  txtBtnNotSelected: {
+    fontWeight: 'bold',
+    color: '#67BBF2'
+  },
+  margin5: {
+    margin: 5
+  },
+  marginUpDownButtons: {
+    marginHorizontal: 7
   },
 });
