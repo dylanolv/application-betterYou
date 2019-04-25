@@ -16,6 +16,14 @@ export default class HomeScreen extends React.Component {
     };
   }
 
+  onPressUp() {
+    this.setState({ upBtnSelected: !this.state.upBtnSelected, downBtnSelected: false })
+  }
+
+  onPressDown() {
+    this.setState({ downBtnSelected: !this.state.downBtnSelected, upBtnSelected: false })
+  }
+
   render() {
     return (
       <Container>
@@ -38,53 +46,29 @@ export default class HomeScreen extends React.Component {
                   In in lectus in libero ornare consequat. Phasellus tempor nisl vulputate urna ullamcorper.
                 </Text>
                 <TouchableOpacity style={[styles.more]}>
-                  <Text>En savoir plus..</Text>
+                  <Text style={[styles.moreTxt]}>En savoir plus..</Text>
                 </TouchableOpacity>
               </Body>
             </CardItem>
             <CardItem style={{justifyContent: 'center'}}>
-                <Button style={[(this.state.upBtnSelected == true)?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={() => this.setState({ upBtnSelected: !this.state.upBtnSelected })}>
+                <Button style={[(this.state.upBtnSelected == true)?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={this.onPressUp.bind(this)}>
                   <Icon style={(this.state.upBtnSelected == true)?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-up'/>
                   <Text style={(this.state.upBtnSelected == true)?styles.txtBtnSelected:styles.txtBtnNotSelected}>470</Text>
                 </Button>
-                <Button style={[(this.state.downBtnSelected == true)?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={() => this.setState({ downBtnSelected: !this.state.downBtnSelected })}>
-                  <Icon style={(this.state.downBtnSelected == true)?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-up'/>
-                  <Text style={(this.state.downBtnSelected == true)?styles.txtBtnSelected:styles.txtBtnNotSelected}>470</Text>
+                <Button style={[(this.state.downBtnSelected == true)?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={this.onPressDown.bind(this)}>
+                  <Icon style={(this.state.downBtnSelected == true)?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-down'/>
+                  <Text style={(this.state.downBtnSelected == true)?styles.txtBtnSelected:styles.txtBtnNotSelected}>20</Text>
                 </Button>
             </CardItem>
             <CardItem style={{justifyContent: 'center'}}>
-              <Button style={[styles.btnSelected, styles.margin5]}>
+              <Button style={[styles.btnSelected, styles.marginShareCommentButtons]}>
                 <Icon name='share' style={[styles.iconBtnSelected]}/>
                 <Text style={[styles.txtBtnSelected]}>Partager</Text>
               </Button>
-              <Button style={[styles.btnSelected, styles.margin5]}>
+              <Button style={[styles.btnSelected, styles.marginShareCommentButtons]}>
                 <Icon name='chatboxes' style={[styles.iconBtnSelected]}/>
                 <Text style={[styles.txtBtnSelected]}>Commenter</Text>
               </Button>
-                {/* <Fab
-                active={!this.state.active}
-                direction="up"
-                position='bottomLeft'
-                containerStyle={{ }}
-                style={{ backgroundColor: '#67BBF2' }}
-                onPress={() => this.setState({ active: !this.state.active })}>
-                  <Icon name="share" />
-                  <Button style={{ backgroundColor: '#34A34F' }}>
-                    <Icon name="logo-whatsapp" />
-                  </Button>
-                  <Button style={{ backgroundColor: '#3B5998' }}>
-                    <Icon name="logo-facebook" />
-                  </Button>
-                  <Button disabled style={{ backgroundColor: '#DD5144' }}>
-                    <Icon name="mail" />
-                  </Button>
-                </Fab>
-                
-                <Fab 
-                position='bottomRight'
-                style={{ backgroundColor: '#67BBF2' }}>
-                  <Icon name='chatboxes' />
-                </Fab> */}
             </CardItem>
           </Card>
         </Content>
@@ -101,6 +85,9 @@ const styles = StyleSheet.create({
   },
   more: {
     alignSelf: 'flex-end'
+  },
+  moreTxt: {
+    textDecorationLine: 'underline'
   },
   btnSelected: {
     backgroundColor: '#67BBF2',
@@ -128,8 +115,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#67BBF2'
   },
-  margin5: {
-    margin: 5
+  marginShareCommentButtons: {
+    marginHorizontal: 5
   },
   marginUpDownButtons: {
     marginHorizontal: 7
