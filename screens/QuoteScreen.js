@@ -16,7 +16,7 @@ console.warn = message => {
 
 export default class QuoteScreen extends Component {
   static navigationOptions = {
-    title: "Quotes"
+    title: "Better thoughts"
   };
 
   constructor(props) {
@@ -51,16 +51,12 @@ export default class QuoteScreen extends Component {
     if (this.state.loading) {
       return (
         <View style={[styles.container, styles.horizontal]}>
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color="#67BBF2" />
         </View>
       )
     }
     else {
       return (
-        // <View style={styles.container}>
-        //   <Text>{this.state.items.author}</Text>
-        //   <Text>{this.state.items.content}</Text>
-        // </View>
         <Container style={[styles.container, styles.horizontal]}>
         <Content padder>
           <Card>

@@ -4,7 +4,7 @@ import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Ic
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    title: "Home"
+    title: "Discoveries"
   };
 
   constructor(props) {
@@ -29,38 +29,42 @@ export default class HomeScreen extends React.Component {
             </CardItem>
             <CardItem>
               <Body>
-                <Image source={require('../assets/images/discovery-image1.jpg')} style={{height: 200, width: 370, flex: 1}}/>
-                <Text>
+                <Image source={require('../assets/images/discovery-image1.jpg')} style={{flex: 1, resizeMode: 'cover', height: 200, width: 370}}/>
+                <Text style={{paddingTop: 10}}>
                   Nulla tempus ac urna vel pellentesque. Nullam imperdiet dictum ultricies. 
                   Suspendisse in nisl nec orci accumsan tincidunt. Nullam at erat lacus. 
                   In in lectus in libero ornare consequat. Phasellus tempor nisl vulputate urna ullamcorper.
                 </Text>
-              </Body>
-            </CardItem>
-            <CardItem >
-              <Right>
-                <TouchableOpacity>
+                <TouchableOpacity style={[styles.more]}>
                   <Text>En savoir plus..</Text>
                 </TouchableOpacity>
-              </Right>
+              </Body>
             </CardItem>
             <CardItem style={{justifyContent: 'center'}}>
-                <Button style={{margin: 10}}>
-                  <Icon name='ios-trending-up' style={{fontSize: 40}}/>
+                <Button style={{backgroundColor: '#67BBF2', margin: 7}}>
+                  <Icon name='trending-up' style={{fontSize: 40}}/>
                   <Text>470</Text>
                 </Button>
-                <Button style={{margin: 10}}>
-                  <Icon name='ios-trending-down' style={{fontSize: 40}}/>
-                  <Text>20</Text>
+                <Button transparent bordered style={{borderColor: '#67BBF2', margin: 7}}>
+                  <Icon name='trending-down' style={{color: '#67BBF2', fontSize: 40}}/>
+                  <Text style={{color: '#67BBF2', fontWeight: 'bold'}}>20</Text>
                 </Button>
             </CardItem>
-            <CardItem>
-                <Fab
+            <CardItem style={{justifyContent: 'center'}}>
+              <Button transparent bordered style={{borderColor: '#67BBF2', margin: 5}}>
+                <Icon name='share' style={{color: '#67BBF2', fontSize: 40}}/>
+                <Text style={{color: '#67BBF2', fontWeight: 'bold'}}>Partager</Text>
+              </Button>
+              <Button transparent bordered style={{borderColor: '#67BBF2', margin: 5}}>
+                <Icon name='chatboxes' style={{color: '#67BBF2', fontSize: 40}}/>
+                <Text style={{color: '#67BBF2', fontWeight: 'bold'}}>Commenter</Text>
+              </Button>
+                {/* <Fab
                 active={!this.state.active}
                 direction="up"
+                position='bottomLeft'
                 containerStyle={{ }}
-                style={{ backgroundColor: '#5067FF' }}
-                position="bottomRight"
+                style={{ backgroundColor: '#67BBF2' }}
                 onPress={() => this.setState({ active: !this.state.active })}>
                   <Icon name="share" />
                   <Button style={{ backgroundColor: '#34A34F' }}>
@@ -73,59 +77,12 @@ export default class HomeScreen extends React.Component {
                     <Icon name="mail" />
                   </Button>
                 </Fab>
-                <Button transparent bordered>
-                  <Icon name='md-chatboxes' style={{fontSize: 40}}/>
-                  <Text>Commenter</Text>
-                </Button>
-            </CardItem>
-          </Card>
-
-          
-          <Card style={{flex: 0}}>
-            <CardItem>
-              <Left>
-                <Body>
-                  <Text note>Catégorie</Text>
-                  <Text>Titre Découverte</Text>
-                </Body>
-              </Left>
-            </CardItem>
-            <CardItem>
-              <Body>
-                <Image source={require('../assets/images/discovery-image2.png')} style={{height: 200, width: 370, flex: 1}}/>
-                <Text>
-                  Nulla tempus ac urna vel pellentesque. Nullam imperdiet dictum ultricies. 
-                  Suspendisse in nisl nec orci accumsan tincidunt. Nullam at erat lacus. 
-                  In in lectus in libero ornare consequat. Phasellus tempor nisl vulputate urna ullamcorper.
-                </Text>
-              </Body>
-            </CardItem>
-            <CardItem >
-              <Right>
-                <TouchableOpacity>
-                  <Text>En savoir plus..</Text>
-                </TouchableOpacity>
-              </Right>
-            </CardItem>
-            <CardItem style={{justifyContent: 'center'}}>
-                <Button style={{margin: 10}}>
-                  <Icon name='ios-trending-up' style={{fontSize: 40}}/>
-                  <Text>470</Text>
-                </Button>
-                <Button style={{margin: 10}}>
-                  <Icon name='ios-trending-down' style={{fontSize: 40}}/>
-                  <Text>20</Text>
-                </Button>
-            </CardItem>
-            <CardItem style={{justifyContent: 'center'}}>
-                <Button transparent bordered>
-                  <Icon name='md-share' style={{fontSize: 40}}/>
-                  <Text>Partager</Text>
-                </Button>
-                <Button transparent bordered>
-                  <Icon name='md-chatboxes' style={{fontSize: 40}}/>
-                  <Text>Commenter</Text>
-                </Button>
+                
+                <Fab 
+                position='bottomRight'
+                style={{ backgroundColor: '#67BBF2' }}>
+                  <Icon name='chatboxes' />
+                </Fab> */}
             </CardItem>
           </Card>
         </Content>
@@ -136,10 +93,11 @@ export default class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff"
+    flex: 1, 
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  contentContainer: {
-    paddingTop: 30
-  }
+  more: {
+    alignSelf: 'flex-end'
+  },
 });
