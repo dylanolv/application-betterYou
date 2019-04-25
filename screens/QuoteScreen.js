@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
-import { Container, Content, Card, CardItem, Text, Icon, Body } from 'native-base';
+import { Container, Content, Card, CardItem, Text, Icon, Body, Button } from 'native-base';
 import * as firebase from "firebase";
 
 // To hide the yellowbox
@@ -37,7 +37,7 @@ export default class QuoteScreen extends Component {
           i++;
         });
 
-        let RandomNumber = Math.floor(Math.random() * i) + 1;
+        let RandomNumber = Math.floor(Math.random() * i);
         quoteSelected = childData[RandomNumber];
         this.setState({ loading: false, items: quoteSelected });
       });
@@ -67,6 +67,12 @@ export default class QuoteScreen extends Component {
                 <Icon name='md-quote' style={[styles.iconQuote, styles.iconQuote2]}/>
                 <Text style={[styles.author]}>{this.state.items.author}</Text>
               </Body>
+            </CardItem> 
+            <CardItem style={{justifyContent: 'center'}}>
+              <Button style={[styles.btnShuffle]} onPress={this.getRandomQuote.bind(this)}>
+                <Icon name='shuffle'/>
+                <Text>Citation au hasard</Text>
+              </Button>
             </CardItem>
           </Card>
         </Content>
@@ -108,11 +114,15 @@ const styles = StyleSheet.create({
   author: {
     fontSize: 16,
     fontWeight: 'bold',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginBottom: 10
   },
   content: {
     fontSize: 16,
     alignSelf: 'center',
     textAlign: 'center'
-  }
+  },
+  btnShuffle: {
+    backgroundColor: '#67BBF2'
+  },
 });
