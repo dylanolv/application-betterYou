@@ -20,12 +20,14 @@ export default class DiscoveryComponent extends Component {
 
     onPressStar(index) {
         let tabStar = this.state.tabStarSelected;
+
         if (tabStar.includes(index)) { 
-          return false 
+          tabStar.splice( tabStar.indexOf(index), 1 );
         }
-        else { 
+        else {
           tabStar.push(index); 
         }
+
         this.setState({ tabStarSelected: tabStar })
     }
     

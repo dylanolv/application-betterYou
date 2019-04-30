@@ -5,6 +5,9 @@ import DiscoveryComponent from '../components/DiscoveryComponent';
 import * as firebase from "firebase";
 
 export default class HomeScreen extends Component {
+    static navigationOptions = {
+      title: "Better You"
+    };
 
     constructor(props) {
       super(props);
