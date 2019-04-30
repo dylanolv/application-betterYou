@@ -3,7 +3,7 @@ import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Card, CardItem, Text, Button, Icon, Left, Body } from 'native-base';
 import PropTypes from 'prop-types';
 
-export default class DiscoveryComponent extends Component {
+export default class DiscoveriesComponent extends Component {
     
     constructor(props) {
         super(props)
@@ -95,6 +95,9 @@ export default class DiscoveryComponent extends Component {
                                 <Text style={[styles.txt]}>
                                     {discovery.content}
                                 </Text>
+                                <TouchableOpacity style={[styles.more]}>
+                                    <Text style={[styles.moreTxt]}>En savoir plus..</Text>
+                                </TouchableOpacity>
                             </Body>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>
@@ -111,6 +114,10 @@ export default class DiscoveryComponent extends Component {
                             <Button style={[styles.btnSelected, styles.marginShareCommentButtons]}>
                                 <Icon name='share' style={[styles.iconBtnSelected]}/>
                                 <Text style={[styles.txtBtnSelected]}>Partager</Text>
+                            </Button>
+                            <Button style={[styles.btnSelected, styles.marginShareCommentButtons]}>
+                                <Icon name='chatboxes' style={[styles.iconBtnSelected]}/>
+                                <Text style={[styles.txtBtnSelected]}>Commenter</Text>
                             </Button>
                         </CardItem>
                     </Card>

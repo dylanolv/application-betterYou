@@ -8,6 +8,7 @@ import QuoteScreen from '../screens/QuoteScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import AccountScreen from '../screens/AccountScreen';
+import DiscoveryScreen from '../screens/DiscoveryScreen';
 
 const LoginStack = createStackNavigator({
   Login: LoginScreen,
@@ -81,6 +82,24 @@ HomeStack.navigationOptions = {
   ),
 };
 
+const DiscoveryStack = createStackNavigator({
+  Discovery: DiscoveryScreen,
+});
+
+DiscoveryStack.navigationOptions = {
+  tabBarLabel: 'Discovery',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
 const QuoteStack = createStackNavigator({
   Quotes: QuoteScreen,
 });
@@ -104,5 +123,6 @@ export default createBottomTabNavigator({
   SignupStack,
   AccountStack,
   HomeStack,
+  DiscoveryStack,
   QuoteStack
 });

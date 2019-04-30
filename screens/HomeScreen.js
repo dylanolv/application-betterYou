@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { Container, Content } from 'native-base';
-import DiscoveryComponent from '../components/DiscoveryComponent';
+import DiscoveriesComponent from '../components/DiscoveriesComponent';
 import * as firebase from "firebase";
 
 export default class HomeScreen extends Component {
@@ -38,7 +38,7 @@ export default class HomeScreen extends Component {
         return (
           <Container>
             <Content> 
-              <DiscoveryComponent discoveries={this.state.discoveries} />
+              <DiscoveriesComponent discoveries={this.state.discoveries} />
             </Content>
           </Container>
         )
