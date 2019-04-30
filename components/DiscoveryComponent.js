@@ -8,11 +8,9 @@ export default class DiscoveryComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            upBtnSelected: false,
-            downBtnSelected: false,
-            starSelected: false,
-            loading: true, 
-            discoveries: []
+            tabStarSelected: [],
+            tabUpBtnSelected: [],
+            tabDownBtnSelected: []
         };
     }
 
@@ -20,16 +18,57 @@ export default class DiscoveryComponent extends Component {
         discoveries: PropTypes.array.isRequired
     };
 
-    onPressStar() {
-        this.setState({ starSelected: !this.state.starSelected })
+    onPressStar(index) {
+        let tabStar = this.state.tabStarSelected;
+        if (tabStar.includes(index)) { 
+          return false 
+        }
+        else { 
+          tabStar.push(index); 
+        }
+        this.setState({ tabStarSelected: tabStar })
     }
     
-    onPressUp() {
-        this.setState({ upBtnSelected: !this.state.upBtnSelected, downBtnSelected: false })
+    onPressUp(index) {
+        let tabUp = this.state.tabUpBtnSelected;
+        let tabDown = this.state.tabDownBtnSelected;
+
+        if (tabUp.includes(index)) { 
+          tabUp.splice( tabUp.indexOf(index), 1 );
+        }
+        else {
+          tabUp.push(index); 
+        }
+  
+        if (tabDown.includes(index)) { 
+          tabDown.splice( tabDown.indexOf(index), 1 );
+        }
+
+        console.log('Up' + tabUp)
+        console.log('Down' + tabDown)
+  
+        this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
     }
     
-    onPressDown() {
-        this.setState({ downBtnSelected: !this.state.downBtnSelected, upBtnSelected: false })
+    onPressDown(index) {
+      let tabUp = this.state.tabUpBtnSelected;
+      let tabDown = this.state.tabDownBtnSelected;
+
+      if (tabDown.includes(index)) { 
+        tabDown.splice( tabDown.indexOf(index), 1 );
+      }
+      else {
+        tabDown.push(index); 
+      }
+
+      if (tabUp.includes(index)) { 
+        tabUp.splice( tabUp.indexOf(index), 1 );
+      }
+
+      console.log('Up' + tabUp)
+      console.log('Down' + tabDown)
+
+      this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
     }
     
     render() {
@@ -45,7 +84,7 @@ export default class DiscoveryComponent extends Component {
                                 </Body>
                             </Left>
                             <TouchableOpacity style={[styles.star]}>
-                                <Icon style={[styles.iconStar]} name={(this.state.starSelected == true)?'star':'star-outline'} onPress={this.onPressStar.bind(this)}/>
+                                <Icon style={[styles.iconStar]} name={(this.state.tabStarSelected[index] == index)?'star':'star-outline'} onPress={()=>this.onPressStar(index)}/>
                             </TouchableOpacity>
                         </CardItem>
                         <CardItem>
@@ -60,13 +99,13 @@ export default class DiscoveryComponent extends Component {
                             </Body>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>
-                            <Button style={[(this.state.upBtnSelected == true)?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={this.onPressUp.bind(this)}>
-                                <Icon style={(this.state.upBtnSelected == true)?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-up'/>
-                                <Text style={(this.state.upBtnSelected == true)?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.upvotes}</Text>
+                            <Button style={[(this.state.tabUpBtnSelected[index] == index)?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressUp(index)}>
+                                <Icon style={(this.state.tabUpBtnSelected[index] == index)?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-up'/>
+                                <Text style={(this.state.tabUpBtnSelected[index] == index)?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.upvotes}</Text>
                             </Button>
-                            <Button style={[(this.state.downBtnSelected == true)?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={this.onPressDown.bind(this)}>
-                                <Icon style={(this.state.downBtnSelected == true)?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-down'/>
-                                <Text style={(this.state.downBtnSelected == true)?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.downvotes}</Text>
+                            <Button style={[(this.state.tabDownBtnSelected[index] == index)?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressDown(index)}>
+                                <Icon style={(this.state.tabDownBtnSelected[index] == index)?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-down'/>
+                                <Text style={(this.state.tabDownBtnSelected[index] == index)?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.downvotes}</Text>
                             </Button>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>

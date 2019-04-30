@@ -4,7 +4,7 @@ import { Container, Content } from 'native-base';
 import DiscoveryComponent from '../components/DiscoveryComponent';
 import * as firebase from "firebase";
 
-export default class DiscoveryItem extends Component {
+export default class HomeScreen extends Component {
 
     constructor(props) {
       super(props);
