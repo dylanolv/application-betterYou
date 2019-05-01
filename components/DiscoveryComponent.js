@@ -75,8 +75,7 @@ export default class DiscoveryComponent extends Component {
                         <CardItem>
                             <Left>
                                 <Body>
-                                    <Text note>{item.category}</Text>
-                                    <Text style={[styles.title]}>{item.title}</Text>
+                                    <Text note style={[styles.category]}>{item.category}</Text>
                                 </Body>
                             </Left>
                             <TouchableOpacity style={[styles.star]}>
@@ -125,7 +124,8 @@ const styles = StyleSheet.create({
       justifyContent: 'space-around',
       padding: 10
     },
-    title: {
+    category: {
+      fontSize: 18,
       fontWeight: 'bold'
     },
     more: {
