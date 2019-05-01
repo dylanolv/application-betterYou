@@ -67,9 +67,10 @@ export default class DiscoveriesComponent extends Component {
       this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
     }
     
-    goToDiscovery(index) {
+    goToDiscovery(index, title) {
       this.props.navigation.navigate('Discovery', {
-        index: index.toString()
+        index: index,
+        title: title
       })
     }
     
@@ -95,7 +96,7 @@ export default class DiscoveriesComponent extends Component {
                                 <Text style={[styles.txt]}>
                                     {discovery.content1}
                                 </Text>
-                                <TouchableOpacity style={[styles.more]} onPress={()=>this.goToDiscovery(index)}>
+                                <TouchableOpacity style={[styles.more]} onPress={()=>this.goToDiscovery(index, discovery.title)}>
                                     <Text style={[styles.moreTxt]}>En savoir plus..</Text>
                                 </TouchableOpacity>
                             </Body>

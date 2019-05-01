@@ -7,7 +7,7 @@ import * as firebase from "firebase";
 export default class DiscoveryScreen extends Component {
     static navigationOptions = ({ navigation }) => {
       return {
-        title:  "Discovery" + navigation.getParam('index')
+        title: navigation.getParam('title')
       };
     };
 
