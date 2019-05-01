@@ -7,12 +7,11 @@ import * as firebase from "firebase";
 export default class DiscoveriesScreen extends Component {
     static navigationOptions = ({ navigation }) => {
       const { params = {} } = navigation.state
-  
       return {
         headerTitle: 'Better You',
         headerRight: (
           <TouchableOpacity style={[styles.star]}>
-            <Icon name='person' style={{fontSize: 40, color: '#67BBF2', paddingRight: 15}} onPress={() => params.handleNavigation()}/>
+            <Icon name='person' style={{fontSize: 40, color: '#67BBF2', paddingRight: 20}} onPress={() => params.handleNavigation()}/>
           </TouchableOpacity>
         ),
       };

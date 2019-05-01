@@ -9,6 +9,8 @@ import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import AccountScreen from '../screens/AccountScreen';
 import DiscoveryScreen from '../screens/DiscoveryScreen';
+import CategoriesScreen from '../screens/CategoriesScreen';
+import CategoryScreen from '../screens/CategoryScreen';
 
 const AuthenticationStack = createStackNavigator({
   Login: LoginScreen,
@@ -35,6 +37,25 @@ const AccountStack = createStackNavigator({
 
 AccountStack.navigationOptions = {
   tabBarLabel: 'Account',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+
+const CategoriesStack = createStackNavigator({
+  Categories: CategoriesScreen,
+  Category: CategoryScreen
+});
+
+CategoriesStack.navigationOptions = {
+  tabBarLabel: 'Categories',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -87,8 +108,8 @@ QuoteStack.navigationOptions = {
 export default createBottomTabNavigator(
   {
     AuthenticationStack,
-    AccountStack,
     DiscoveriesStack,
+    CategoriesStack,
     QuoteStack
   },
   {

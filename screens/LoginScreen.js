@@ -4,99 +4,98 @@ import React, { Component } from "react";
 import * as firebase from "firebase";
 
 export default class LoginScreen extends Component {
-  static navigationOptions = {
-    title: "Login"
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      email: "",
-      password: "",
-      loading: false
+    static navigationOptions = {
+      title: "Login"
     };
-  }
 
-  render() {
-    const content = this.state.loading ? (
-      <View style={styles.body}>
-        <ActivityIndicator size="large" />
-      </View>
-    ) : (
-      <Content>
-        <List>
-          <ListItem>
-            <InputGroup>
-                <Icon name="ios-person" style={{ color: "#67BBF2" }} />
-                <Input
-                  onChangeText={text => this.setState({ email: text })}
-                  value={this.state.email}
-                  placeholder={"Email Address"}
-                />
-            </InputGroup>
-          </ListItem>
+    constructor(props) {
+      super(props);
 
-          <ListItem>
-            <InputGroup>
-                <Icon name="ios-unlock" style={{ color: "#67BBF2" }} />
-                <Input
-                  onChangeText={text => this.setState({ password: text })}
-                  value={this.state.password}
-                  secureTextEntry={true}
-                  placeholder={"Password"}
-                />
-            </InputGroup>
-          </ListItem>
-        </List>
+      this.state = {
+        email: "",
+        password: "",
+        loading: false
+      };
+    }
 
-        <Button rounded style={styles.primaryButton} onPress={this.login.bind(this)}>
-          <Text>Login</Text>
-        </Button>
-
-        <Button rounded onPress={this.goToSignup.bind(this)} style={styles.primaryButton}>
-          <Text> New Here?</Text>
-        </Button>
-
-      </Content>
-    );
-    
-    return (
-      <Container>
-        {content}
-      </Container>
-    );
-  }
-
-  login() {
-    this.setState({
-      loading: true
-    });
-
-    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(userData => {
-        this.setState({ loading: false });
-        AsyncStorage.setItem("userData", JSON.stringify(userData));
-        this.props.navigation.navigate("DiscoveriesStack");
-      })
-      .catch(error => {
-        this.setState({ loading: false });
-        alert("Login Failed. Please try again" + error);
+    login() {
+      this.setState({
+        loading: true
       });
 
-    // Get the username if user exist
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        var displayName = user.displayName;
-        console.log(displayName);
-      }
-    });
-  }
+      firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+        .then(userData => {
+          this.setState({ loading: false });
+          AsyncStorage.setItem("userData", JSON.stringify(userData));
+          this.props.navigation.navigate("DiscoveriesStack");
+        })
+        .catch(error => {
+          this.setState({ loading: false });
+          alert("Login Failed. Please try again" + error);
+        });
 
-  // Go to the signup page
-  goToSignup() {
-    this.props.navigation.navigate("Signup");
-  }
+      // Get the username if user exist
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          var displayName = user.displayName;
+          console.log(displayName);
+        }
+      });
+    }
+
+    goToSignup() {
+      this.props.navigation.navigate("Signup");
+    }
+
+    render() {
+      const content = this.state.loading ? (
+        <View style={styles.body}>
+          <ActivityIndicator size="large" />
+        </View>
+      ) : (
+        <Content>
+          <List>
+            <ListItem>
+              <InputGroup>
+                  <Icon name="ios-person" style={{ color: "#67BBF2" }} />
+                  <Input
+                    onChangeText={text => this.setState({ email: text })}
+                    value={this.state.email}
+                    placeholder={"Email Address"}
+                  />
+              </InputGroup>
+            </ListItem>
+
+            <ListItem>
+              <InputGroup>
+                  <Icon name="ios-unlock" style={{ color: "#67BBF2" }} />
+                  <Input
+                    onChangeText={text => this.setState({ password: text })}
+                    value={this.state.password}
+                    secureTextEntry={true}
+                    placeholder={"Password"}
+                  />
+              </InputGroup>
+            </ListItem>
+          </List>
+
+          <Button rounded style={styles.primaryButton} onPress={this.login.bind(this)}>
+            <Text>Login</Text>
+          </Button>
+
+          <Button rounded onPress={this.goToSignup.bind(this)} style={styles.primaryButton}>
+            <Text>New Here?</Text>
+          </Button>
+
+        </Content>
+      );
+      
+      return (
+        <Container>
+          {content}
+        </Container>
+      );
+    }
 }
 
 const styles = StyleSheet.create({

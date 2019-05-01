@@ -16,7 +16,7 @@ console.warn = message => {
 
 export default class QuoteScreen extends Component {
   static navigationOptions = {
-    title: "Better thoughts"
+    title: "Citations"
   };
 
   constructor(props) {
