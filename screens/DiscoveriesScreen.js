@@ -4,7 +4,7 @@ import { Container, Content } from 'native-base';
 import DiscoveriesComponent from '../components/DiscoveriesComponent';
 import * as firebase from "firebase";
 
-export default class HomeScreen extends Component {
+export default class DiscoveriesScreen extends Component {
     static navigationOptions = {
       title: "Better You"
     };
@@ -38,7 +38,7 @@ export default class HomeScreen extends Component {
         return (
           <Container>
             <Content> 
-              <DiscoveriesComponent discoveries={this.state.discoveries} />
+              <DiscoveriesComponent navigation={this.props.navigation} discoveries={this.state.discoveries} />
             </Content>
           </Container>
         )

@@ -45,9 +45,6 @@ export default class DiscoveriesComponent extends Component {
         if (tabDown.includes(index)) { 
           tabDown.splice( tabDown.indexOf(index), 1 );
         }
-
-        console.log('Up' + tabUp)
-        console.log('Down' + tabDown)
   
         this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
     }
@@ -67,10 +64,13 @@ export default class DiscoveriesComponent extends Component {
         tabUp.splice( tabUp.indexOf(index), 1 );
       }
 
-      console.log('Up' + tabUp)
-      console.log('Down' + tabDown)
-
       this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
+    }
+    
+    goToDiscovery(index) {
+      this.props.navigation.navigate('Discovery', {
+        index: index.toString()
+      })
     }
     
     render() {
@@ -93,9 +93,9 @@ export default class DiscoveriesComponent extends Component {
                             <Body>
                                 <Image source={require('../assets/images/minimalism1.jpg')} style={[styles.img]}/>
                                 <Text style={[styles.txt]}>
-                                    {discovery.content}
+                                    {discovery.content1}
                                 </Text>
-                                <TouchableOpacity style={[styles.more]}>
+                                <TouchableOpacity style={[styles.more]} onPress={()=>this.goToDiscovery(index)}>
                                     <Text style={[styles.moreTxt]}>En savoir plus..</Text>
                                 </TouchableOpacity>
                             </Body>

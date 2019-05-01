@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { Container, Content } from 'native-base';
-import DiscoveryComponent from '../components/DiscoveriesComponent';
+import DiscoveryComponent from '../components/DiscoveryComponent';
 import * as firebase from "firebase";
 
 export default class DiscoveryScreen extends Component {
-    static navigationOptions = {
-      title: "Discovery"
+    static navigationOptions = ({ navigation }) => {
+      return {
+        title:  "Discovery" + navigation.getParam('index')
+      };
     };
 
     constructor(props) {
@@ -19,9 +21,13 @@ export default class DiscoveryScreen extends Component {
     }
 
     componentDidMount() {
+      
+		  const { navigation } = this.props;
+      const index = navigation.getParam('index');
+      console.log(index)
+
       firebase.database().ref("discoveries/").on('value', (snapshot) => {
         let data = snapshot.val();
-        console.log(data)
         let discoveries = Object.values(data);
         this.setState({discoveries: discoveries, loading: false});
       });

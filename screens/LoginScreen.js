@@ -77,7 +77,7 @@ export default class LoginScreen extends Component {
       .then(userData => {
         this.setState({ loading: false });
         AsyncStorage.setItem("userData", JSON.stringify(userData));
-        this.props.navigation.navigate("HomeStack");
+        this.props.navigation.navigate("DiscoveriesStack");
       })
       .catch(error => {
         this.setState({ loading: false });
@@ -95,7 +95,7 @@ export default class LoginScreen extends Component {
 
   // Go to the signup page
   goToSignup() {
-    this.props.navigation.navigate("SignupStack");
+    this.props.navigation.navigate("Signup");
   }
 }
 

@@ -30,7 +30,7 @@ export default class AccountScreen extends React.Component {
       if(user_data != null){
         this.props.navigation.navigate("AccountStack");
       }else{
-        this.props.navigation.navigate("LoginStack");
+        this.props.navigation.navigate("Login");
       }
     });
   }
@@ -39,7 +39,7 @@ export default class AccountScreen extends React.Component {
     // logout, once that is complete, return the user to the login screen.
     AsyncStorage.removeItem('userData').then(() => {
       firebase.auth().signOut().then(() => {
-        this.props.navigation.navigate("LoginStack");
+        this.props.navigation.navigate("Login");
       });  
     });
   }

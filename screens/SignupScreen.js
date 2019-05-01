@@ -28,7 +28,7 @@ export default class SignupScreen extends Component {
         .then(() => {
             alert('Your account was created!');
             this.setState({ email: '', password: '', loading: false });
-            this.props.navigation.navigate("HomeStack");
+            this.props.navigation.navigate("DiscoveriesStack");
         })
         .catch((error) => {
             this.setState({ loading: false });
@@ -106,7 +106,7 @@ export default class SignupScreen extends Component {
     }
 
     goToLogin(){
-        this.props.navigation.navigate("LoginStack");
+        this.props.navigation.navigate("Login");
     }
 }
 

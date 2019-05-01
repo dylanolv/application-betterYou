@@ -45,9 +45,6 @@ export default class DiscoveryComponent extends Component {
         if (tabDown.includes(index)) { 
           tabDown.splice( tabDown.indexOf(index), 1 );
         }
-
-        console.log('Up' + tabUp)
-        console.log('Down' + tabDown)
   
         this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
     }
@@ -67,9 +64,6 @@ export default class DiscoveryComponent extends Component {
         tabUp.splice( tabUp.indexOf(index), 1 );
       }
 
-      console.log('Up' + tabUp)
-      console.log('Down' + tabDown)
-
       this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
     }
     
@@ -86,25 +80,25 @@ export default class DiscoveryComponent extends Component {
                                 </Body>
                             </Left>
                             <TouchableOpacity style={[styles.star]}>
-                                <Icon style={[styles.iconStar]} name={(this.state.tabStarSelected[index] == index)?'star':'star-outline'} onPress={()=>this.onPressStar(index)}/>
+                                <Icon style={[styles.iconStar]} name={(this.state.tabStarSelected.includes(index))?'star':'star-outline'} onPress={()=>this.onPressStar(index)}/>
                             </TouchableOpacity>
                         </CardItem>
                         <CardItem>
                             <Body>
                                 <Image source={require('../assets/images/minimalism1.jpg')} style={[styles.img]}/>
                                 <Text style={[styles.txt]}>
-                                    {discovery.content}
+                                    {discovery.content2}
                                 </Text>
                             </Body>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>
-                            <Button style={[(this.state.tabUpBtnSelected[index] == index)?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressUp(index)}>
-                                <Icon style={(this.state.tabUpBtnSelected[index] == index)?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-up'/>
-                                <Text style={(this.state.tabUpBtnSelected[index] == index)?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.upvotes}</Text>
+                            <Button style={[(this.state.tabUpBtnSelected.includes(index))?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressUp(index)}>
+                                <Icon style={(this.state.tabUpBtnSelected.includes(index))?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-up'/>
+                                <Text style={(this.state.tabUpBtnSelected.includes(index))?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.upvotes}</Text>
                             </Button>
-                            <Button style={[(this.state.tabDownBtnSelected[index] == index)?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressDown(index)}>
-                                <Icon style={(this.state.tabDownBtnSelected[index] == index)?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-down'/>
-                                <Text style={(this.state.tabDownBtnSelected[index] == index)?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.downvotes}</Text>
+                            <Button style={[(this.state.tabDownBtnSelected.includes(index))?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressDown(index)}>
+                                <Icon style={(this.state.tabDownBtnSelected.includes(index))?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-down'/>
+                                <Text style={(this.state.tabDownBtnSelected.includes(index))?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.downvotes}</Text>
                             </Button>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>

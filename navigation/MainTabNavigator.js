@@ -3,18 +3,19 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
+import DiscoveriesScreen from '../screens/DiscoveriesScreen';
 import QuoteScreen from '../screens/QuoteScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import AccountScreen from '../screens/AccountScreen';
 import DiscoveryScreen from '../screens/DiscoveryScreen';
 
-const LoginStack = createStackNavigator({
+const AuthenticationStack = createStackNavigator({
   Login: LoginScreen,
+  Signup: SignupScreen
 });
 
-LoginStack.navigationOptions = {
+AuthenticationStack.navigationOptions = {
   tabBarLabel: 'Login',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -28,26 +29,8 @@ LoginStack.navigationOptions = {
   ),
 };
 
-const SignupStack = createStackNavigator({
-  Signup: SignupScreen,
-});
-
-SignupStack.navigationOptions = {
-  tabBarLabel: 'Signup',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
-    />
-  ),
-};
-
 const AccountStack = createStackNavigator({
-  Account: AccountScreen,
+  Account: AccountScreen
 });
 
 AccountStack.navigationOptions = {
@@ -64,11 +47,12 @@ AccountStack.navigationOptions = {
   ),
 };
 
-const HomeStack = createStackNavigator({
-  Home: HomeScreen,
+const DiscoveriesStack = createStackNavigator({
+  Discoveries: DiscoveriesScreen,
+  Discovery: DiscoveryScreen
 });
 
-HomeStack.navigationOptions = {
+DiscoveriesStack.navigationOptions = {
   tabBarLabel: 'Home',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -82,26 +66,8 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const DiscoveryStack = createStackNavigator({
-  Discovery: DiscoveryScreen,
-});
-
-DiscoveryStack.navigationOptions = {
-  tabBarLabel: 'Discovery',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
-    />
-  ),
-};
-
 const QuoteStack = createStackNavigator({
-  Quotes: QuoteScreen,
+  Quotes: QuoteScreen
 });
 
 QuoteStack.navigationOptions = {
@@ -118,11 +84,14 @@ QuoteStack.navigationOptions = {
   ),
 };
 
-export default createBottomTabNavigator({
-  LoginStack,
-  SignupStack,
-  AccountStack,
-  HomeStack,
-  DiscoveryStack,
-  QuoteStack
-});
+export default createBottomTabNavigator(
+  {
+    AuthenticationStack,
+    AccountStack,
+    DiscoveriesStack,
+    QuoteStack
+  },
+  {
+    initialRouteName: 'DiscoveriesStack'
+  }
+);
