@@ -15,21 +15,18 @@ export default class DiscoveryScreen extends Component {
       super(props);
   
       this.state = {
-        discoveries: [],
+        discovery: [],
         loading: true
       };
     }
 
     componentDidMount() {
-      
 		  const { navigation } = this.props;
       const index = navigation.getParam('index');
-      console.log(index)
-
-      firebase.database().ref("discoveries/").on('value', (snapshot) => {
+      firebase.database().ref("discoveries/" + index).on('value', (snapshot) => {
         let data = snapshot.val();
-        let discoveries = Object.values(data);
-        this.setState({discoveries: discoveries, loading: false});
+        let discovery = Object.values(data);
+        this.setState({discovery: discovery, loading: false});
       });
     }
     
@@ -45,7 +42,7 @@ export default class DiscoveryScreen extends Component {
         return (
           <Container>
             <Content> 
-              <DiscoveryComponent discoveries={this.state.discoveries} />
+              <DiscoveryComponent discovery={this.state.discovery} />
             </Content>
           </Container>
         )

@@ -1,10 +1,10 @@
 {
-  "devToolsPort": 19002,
   "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 11260,
+  "webpackServerPort": null,
   "expoServerNgrokUrl": "https://gy-7ct.dylanolb.application-betteryou.exp.direct",
   "packagerNgrokUrl": "https://packager.gy-7ct.dylanolb.application-betteryou.exp.direct",
-  "ngrokPid": 17352,
-  "webpackServerPort": null
+  "ngrokPid": 16180,
+  "devToolsPort": 19002,
+  "packagerPort": 19001,
+  "packagerPid": 4792
 }

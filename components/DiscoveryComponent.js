@@ -15,7 +15,7 @@ export default class DiscoveryComponent extends Component {
     }
 
     static propTypes = {
-        discoveries: PropTypes.array.isRequired
+        discovery: PropTypes.array.isRequired
     };
 
     onPressStar(index) {
@@ -69,14 +69,14 @@ export default class DiscoveryComponent extends Component {
     
     render() {
         return (
-            this.props.discoveries.map((discovery, index) => {
+            this.props.discovery.map((item, index) => {
                 return (
                     <Card key={index} style={{flex: 0}}>
                         <CardItem>
                             <Left>
                                 <Body>
-                                    <Text note>{discovery.category}</Text>
-                                    <Text style={[styles.title]}>{discovery.title}</Text>
+                                    <Text note>{item.category}</Text>
+                                    <Text style={[styles.title]}>{item.title}</Text>
                                 </Body>
                             </Left>
                             <TouchableOpacity style={[styles.star]}>
@@ -87,18 +87,18 @@ export default class DiscoveryComponent extends Component {
                             <Body>
                                 <Image source={require('../assets/images/minimalism1.jpg')} style={[styles.img]}/>
                                 <Text style={[styles.txt]}>
-                                    {discovery.content2}
+                                    {item.content2}
                                 </Text>
                             </Body>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>
                             <Button style={[(this.state.tabUpBtnSelected.includes(index))?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressUp(index)}>
                                 <Icon style={(this.state.tabUpBtnSelected.includes(index))?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-up'/>
-                                <Text style={(this.state.tabUpBtnSelected.includes(index))?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.upvotes}</Text>
+                                <Text style={(this.state.tabUpBtnSelected.includes(index))?styles.txtBtnSelected:styles.txtBtnNotSelected}>{item.upvotes}</Text>
                             </Button>
                             <Button style={[(this.state.tabDownBtnSelected.includes(index))?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressDown(index)}>
                                 <Icon style={(this.state.tabDownBtnSelected.includes(index))?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-down'/>
-                                <Text style={(this.state.tabDownBtnSelected.includes(index))?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.downvotes}</Text>
+                                <Text style={(this.state.tabDownBtnSelected.includes(index))?styles.txtBtnSelected:styles.txtBtnNotSelected}>{item.downvotes}</Text>
                             </Button>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>
