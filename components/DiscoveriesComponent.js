@@ -86,8 +86,8 @@ export default class DiscoveriesComponent extends Component {
                                     <Text style={[styles.title]}>{discovery.title}</Text>
                                 </Body>
                             </Left>
-                            <TouchableOpacity style={[styles.star]}>
-                                <Icon style={[styles.iconStar]} name={(this.state.tabStarSelected.includes(index))?'star':'star-outline'} onPress={()=>this.onPressStar(index)}/>
+                            <TouchableOpacity style={[styles.star]} onPress={()=>this.onPressStar(index)}>
+                                <Icon style={[styles.iconStar]} name={(this.state.tabStarSelected.includes(index))?'star':'star-outline'}/>
                             </TouchableOpacity>
                         </CardItem>
                         <CardItem>

@@ -34,10 +34,21 @@ export default class CategoriesScreen extends Component {
     componentDidMount() {
       firebase.database().ref("discoveries/").orderByChild('category').on('value', (snapshot) => {
         let childData = [];
+        let i = -1;
+        let categoriesData = [];
+        let categorieDataFiltered = [];
+
         snapshot.forEach(function(childSnapshot) {
           childData.push(childSnapshot.val());
+          i++;
+          categoriesData.push(childData[i].category);
         });
-        this.setState({ loading: false, categories: childData });
+        
+        categorieDataFiltered = categoriesData.filter(function(item, index){
+          return categoriesData.indexOf(item) >= index;
+        });
+
+        this.setState({ loading: false, categories: categorieDataFiltered  });
       });
     }
     

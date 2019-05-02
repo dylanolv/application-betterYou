@@ -10,7 +10,7 @@ export default class DiscoveriesScreen extends Component {
       return {
         headerTitle: 'Better You',
         headerRight: (
-          <TouchableOpacity style={[styles.star]}>
+          <TouchableOpacity>
             <Icon name='person' style={{fontSize: 40, color: '#67BBF2', paddingRight: 20}} onPress={() => params.handleNavigation()}/>
           </TouchableOpacity>
         ),

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { ListItem, Text, Left, Right, Icon } from 'native-base';
 import PropTypes from 'prop-types';
 
@@ -14,10 +14,9 @@ export default class CategoriesComponent extends Component {
         categories: PropTypes.array.isRequired
     };
     
-    goToCategory(index, title) {
-      this.props.navigation.navigate('Discovery', {
-        index: index,
-        title: title
+    goToCategory(category) {
+      this.props.navigation.navigate('Category', {
+        category: category
       })
     }
     
@@ -27,7 +26,9 @@ export default class CategoriesComponent extends Component {
                 return (
                     <ListItem key={index}>
                         <Left>
-                            <Text>{category.category}</Text>
+                            <TouchableOpacity onPress={()=>this.goToCategory(category)}>
+                                <Text>{category}</Text>
+                            </TouchableOpacity>
                         </Left>
                         <Right>
                             <Icon name="arrow-forward" />

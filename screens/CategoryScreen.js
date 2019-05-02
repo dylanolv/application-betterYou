@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { Container, Header, Content, List, ListItem, Text, Left, Right, Icon } from 'native-base';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { Container, Content } from 'native-base';
+import DiscoveriesComponent from '../components/DiscoveriesComponent';
 import * as firebase from "firebase";
 
 export default class CategoryScreen extends Component {
     static navigationOptions = ({ navigation }) => {
       return {
-        headerTitle: 'Catégorie'
+        title: navigation.getParam('category')
       };
     };
   
@@ -14,19 +15,50 @@ export default class CategoryScreen extends Component {
       super(props);
   
       this.state = {
+        discoveries: [],
         loading: true
       };
     }
 
     componentDidMount() {
+		  const { navigation } = this.props;
+      const category = navigation.getParam('category');
+
+      firebase.database().ref("discoveries/").on('value', (snapshot) => {
+        let childData = [];
+        let i = -1;
+        let categoriesData = [];
+
+        snapshot.forEach(function(childSnapshot) {
+          childData.push(childSnapshot.val());
+          i++;
+          if (childData[i].category == category) {
+            categoriesData.push(childData[i]);
+          }
+        });
+        
+        this.setState({ discoveries: categoriesData, loading: false});
+      });
     }
     
     render() {   
+      if (this.state.loading) {
         return (
-            <View style={[styles.container, styles.horizontal]}>
-            </View>
+          <View style={[styles.container, styles.horizontal]}>
+            <ActivityIndicator size="large" color="#67BBF2" />
+          </View>
         )
-    } 
+      }
+      else {
+        return (
+          <Container>
+            <Content> 
+              <DiscoveriesComponent navigation={this.props.navigation} discoveries={this.state.discoveries} />
+            </Content>
+          </Container>
+        )
+      }  
+    }
 }
 
 const styles = StyleSheet.create({
