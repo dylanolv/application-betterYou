@@ -24,11 +24,9 @@ export default class CategoriesComponent extends Component {
         return (
             this.props.categories.map((category, index) => {
                 return (
-                    <ListItem key={index}>
+                    <ListItem key={index} button={true} onPress={()=>this.goToCategory(category)}>
                         <Left>
-                            <TouchableOpacity onPress={()=>this.goToCategory(category)}>
-                                <Text>{category}</Text>
-                            </TouchableOpacity>
+                            <Text>{category}</Text>
                         </Left>
                         <Right>
                             <Icon name="arrow-forward" />

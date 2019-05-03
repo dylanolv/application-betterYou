@@ -31,24 +31,6 @@ AuthenticationStack.navigationOptions = {
   ),
 };
 
-const AccountStack = createStackNavigator({
-  Account: AccountScreen
-});
-
-AccountStack.navigationOptions = {
-  tabBarLabel: 'Account',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
-    />
-  ),
-};
-
 const CategoriesStack = createStackNavigator({
   Categories: CategoriesScreen,
   Category: CategoryScreen
@@ -70,7 +52,8 @@ CategoriesStack.navigationOptions = {
 
 const DiscoveriesStack = createStackNavigator({
   Discoveries: DiscoveriesScreen,
-  Discovery: DiscoveryScreen
+  Discovery: DiscoveryScreen,
+  Account: AccountScreen
 });
 
 DiscoveriesStack.navigationOptions = {

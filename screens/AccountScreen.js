@@ -1,6 +1,6 @@
 import React from "react";
-import { AppState, AsyncStorage, View, ActivityIndicator, StyleSheet, ScrollView } from "react-native";
-import { Header, Container, Title, Content, List, ListItem, InputGroup, Input, Icon, Text, Button } from "native-base";
+import { AsyncStorage, View, StyleSheet } from "react-native";
+import { Text, Button } from "native-base";
 import * as firebase from "firebase";
 
 export default class AccountScreen extends React.Component {
@@ -27,10 +27,11 @@ export default class AccountScreen extends React.Component {
     AsyncStorage.getItem('userData').then((user_data_json) => {
       let user_data = JSON.parse(user_data_json);
       console.log(user_data)
-      if(user_data != null){
+      if (user_data != null) {
         this.props.navigation.navigate("AccountStack");
-      }else{
-        this.props.navigation.navigate("Login");
+      }
+      else {
+        this.props.navigation.navigate("DiscoveriesStack");
       }
     });
   }
@@ -39,6 +40,7 @@ export default class AccountScreen extends React.Component {
     // logout, once that is complete, return the user to the login screen.
     AsyncStorage.removeItem('userData').then(() => {
       firebase.auth().signOut().then(() => {
+        this.props.navigation.goBack();
         this.props.navigation.navigate("Login");
       });  
     });

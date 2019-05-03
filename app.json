@@ -4,6 +4,12 @@
     "slug": "application-betterYou",
     "privacy": "public",
     "sdkVersion": "32.0.0",
+    "ios": {
+      "bundleIdentifier": "com.yourcompany.yourappname"
+    },
+    "android": {
+      "package": "com.yourcompany.yourappname"
+    },
     "platforms": [
       "ios",
       "android"
@@ -21,9 +27,6 @@
     },
     "assetBundlePatterns": [
       "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    }
+    ]
   }
 }

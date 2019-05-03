@@ -67,7 +67,7 @@ export default class DiscoveriesComponent extends Component {
       this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
     }
     
-    goToDiscovery(index, title) {
+    goToDiscovery = (index, title) => {
       this.props.navigation.navigate('Discovery', {
         index: index,
         title: title
@@ -83,7 +83,7 @@ export default class DiscoveriesComponent extends Component {
                             <Left>
                                 <Body>
                                     <Text note>{discovery.category}</Text>
-                                    <Text style={[styles.title]}>{discovery.title}</Text>
+                                    <Text style={[styles.title]} button onPress={()=>this.goToDiscovery(index, discovery.title)}>{discovery.title}</Text>
                                 </Body>
                             </Left>
                             <TouchableOpacity style={[styles.star]} onPress={()=>this.onPressStar(index)}>
@@ -93,7 +93,7 @@ export default class DiscoveriesComponent extends Component {
                         <CardItem>
                             <Body>
                                 <Image source={require('../assets/images/minimalism1.jpg')} style={[styles.img]}/>
-                                <Text style={[styles.txt]}>
+                                <Text style={[styles.txt]} button onPress={()=>this.goToDiscovery(index, discovery.title)}>
                                     {discovery.content1}
                                 </Text>
                                 <TouchableOpacity style={[styles.more]} onPress={()=>this.goToDiscovery(index, discovery.title)}>
@@ -101,7 +101,7 @@ export default class DiscoveriesComponent extends Component {
                                 </TouchableOpacity>
                             </Body>
                         </CardItem>
-                        <CardItem style={{justifyContent: 'center'}}>
+                        <CardItem style={{justifyContent: 'center'}} button onPress={()=>this.goToDiscovery(index, discovery.title)}>
                             <Button style={[(this.state.tabUpBtnSelected.includes(index))?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressUp(index)}>
                                 <Icon style={(this.state.tabUpBtnSelected.includes(index))?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-up'/>
                                 <Text style={(this.state.tabUpBtnSelected.includes(index))?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.upvotes}</Text>
@@ -111,12 +111,12 @@ export default class DiscoveriesComponent extends Component {
                                 <Text style={(this.state.tabDownBtnSelected.includes(index))?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.downvotes}</Text>
                             </Button>
                         </CardItem>
-                        <CardItem style={{justifyContent: 'center'}}>
-                            <Button style={[styles.btnSelected, styles.marginShareCommentButtons]}>
+                        <CardItem style={{justifyContent: 'center'}} button onPress={()=>this.goToDiscovery(index, discovery.title)}>
+                            <Button style={[styles.btnShareComment, styles.marginShareCommentButtons]}>
                                 <Icon name='share' style={[styles.iconBtnSelected]}/>
                                 <Text style={[styles.txtBtnSelected]}>Partager</Text>
                             </Button>
-                            <Button style={[styles.btnSelected, styles.marginShareCommentButtons]}>
+                            <Button style={[styles.btnShareComment, styles.marginShareCommentButtons]}>
                                 <Icon name='chatboxes' style={[styles.iconBtnSelected]}/>
                                 <Text style={[styles.txtBtnSelected]}>Commenter</Text>
                             </Button>
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     horizontal: {
       flexDirection: 'row',
       justifyContent: 'space-around',
-      padding: 10
+      padding: 15
     },
     title: {
       fontWeight: 'bold'
@@ -167,19 +167,33 @@ const styles = StyleSheet.create({
     btnSelected: {
       backgroundColor: '#67BBF2',
       borderWidth: 1,
-      borderColor: '#67BBF2'
+      borderColor: '#67BBF2',
+      height: '84%',
+      width: '35%',
+      justifyContent: 'center'
     },
     btnNotSelected: {
       backgroundColor: 'transparent',
       borderWidth: 1,
-      borderColor: '#67BBF2'
+      borderColor: '#67BBF2',
+      height: '84%',
+      width: '35%',
+      justifyContent: 'center'
+    },
+    btnShareComment: {
+      backgroundColor: '#67BBF2',
+      borderWidth: 1,
+      borderColor: '#67BBF2',
+      height: '84%',
+      width: '45%',
+      justifyContent: 'center'
     },
     iconBtnSelected: {
-      fontSize: 40,
+      fontSize: 35,
       color: '#FFFFFF'
     },
     iconBtnNotSelected: {
-      fontSize: 40,
+      fontSize: 35,
       color: '#67BBF2'
     },
     txtBtnSelected: {

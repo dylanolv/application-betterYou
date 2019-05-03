@@ -101,7 +101,7 @@ export default class DiscoveryComponent extends Component {
                             </Button>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>
-                            <Button style={[styles.btnSelected, styles.marginShareCommentButtons]}>
+                            <Button style={[styles.btnShareComment, styles.marginShareCommentButtons]}>
                                 <Icon name='share' style={[styles.iconBtnSelected]}/>
                                 <Text style={[styles.txtBtnSelected]}>Partager</Text>
                             </Button>
@@ -114,72 +114,83 @@ export default class DiscoveryComponent extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      alignItems: 'center',
-      flex: 1,
-      justifyContent: 'center'
-    },
-    horizontal: {
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      padding: 10
-    },
-    category: {
-      fontSize: 18,
-      fontWeight: 'bold'
-    },
-    more: {
-      alignSelf: 'flex-end'
-    },
-    moreTxt: {
-      textDecorationLine: 'underline'
-    },
-    img: {
-      flex: 1, 
-      resizeMode: 'cover', 
-      height: 200, 
-      width: 370
-    },
-    txt: {
-      paddingTop: 10
-    },
-    star: {
-      alignSelf: 'flex-end'
-    },
-    iconStar: {
-      fontSize: 40,
-      color: '#67BBF2'
-    },
-    btnSelected: {
-      backgroundColor: '#67BBF2',
-      borderWidth: 1,
-      borderColor: '#67BBF2'
-    },
-    btnNotSelected: {
-      backgroundColor: 'transparent',
-      borderWidth: 1,
-      borderColor: '#67BBF2'
-    },
-    iconBtnSelected: {
-      fontSize: 40,
-      color: '#FFFFFF'
-    },
-    iconBtnNotSelected: {
-      fontSize: 40,
-      color: '#67BBF2'
-    },
-    txtBtnSelected: {
-      fontWeight: 'bold',
-      color: '#FFFFFF'
-    },
-    txtBtnNotSelected: {
-      fontWeight: 'bold',
-      color: '#67BBF2'
-    },
-    marginShareCommentButtons: {
-      marginHorizontal: 5
-    },
-    marginUpDownButtons: {
-      marginHorizontal: 7
-    },
+  container: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center'
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 15
+  },
+  category: {
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  more: {
+    alignSelf: 'flex-end'
+  },
+  img: {
+    flex: 1, 
+    resizeMode: 'cover', 
+    height: 200, 
+    width: 370
+  },
+  txt: {
+    paddingTop: 10
+  },
+  star: {
+    alignSelf: 'flex-end'
+  },
+  iconStar: {
+    fontSize: 40,
+    color: '#67BBF2'
+  },
+  btnSelected: {
+    backgroundColor: '#67BBF2',
+    borderWidth: 1,
+    borderColor: '#67BBF2',
+    height: '84%',
+    width: '35%',
+    justifyContent: 'center'
+  },
+  btnNotSelected: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: '#67BBF2',
+    height: '84%',
+    width: '35%',
+    justifyContent: 'center'
+  },
+  btnShareComment: {
+    backgroundColor: '#67BBF2',
+    borderWidth: 1,
+    borderColor: '#67BBF2',
+    height: '84%',
+    width: '45%',
+    justifyContent: 'center'
+  },
+  iconBtnSelected: {
+    fontSize: 35,
+    color: '#FFFFFF'
+  },
+  iconBtnNotSelected: {
+    fontSize: 35,
+    color: '#67BBF2'
+  },
+  txtBtnSelected: {
+    fontWeight: 'bold',
+    color: '#FFFFFF'
+  },
+  txtBtnNotSelected: {
+    fontWeight: 'bold',
+    color: '#67BBF2'
+  },
+  marginShareCommentButtons: {
+    marginHorizontal: 5
+  },
+  marginUpDownButtons: {
+    marginHorizontal: 7
+  },
 });

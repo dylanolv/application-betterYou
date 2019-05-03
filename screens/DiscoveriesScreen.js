@@ -6,12 +6,12 @@ import * as firebase from "firebase";
 
 export default class DiscoveriesScreen extends Component {
     static navigationOptions = ({ navigation }) => {
-      const { params = {} } = navigation.state
+      const { params = {} } = navigation.state;
       return {
         headerTitle: 'Better You',
         headerRight: (
-          <TouchableOpacity>
-            <Icon name='person' style={{fontSize: 40, color: '#67BBF2', paddingRight: 20}} onPress={() => params.handleNavigation()}/>
+          <TouchableOpacity onPress={() => params.handleNavigation()}>
+            <Icon name='person' style={{fontSize: 40, color: '#67BBF2', paddingRight: 20}}/>
           </TouchableOpacity>
         ),
       };
@@ -37,7 +37,7 @@ export default class DiscoveriesScreen extends Component {
     }
     
     goToAccount = () => {
-      this.props.navigation.navigate('AccountStack')
+      this.props.navigation.navigate('Account')
     }
     
     render() {   
