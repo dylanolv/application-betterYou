@@ -31,28 +31,22 @@ export default class SignupScreen extends Component {
         this.props.navigation.navigate("DiscoveriesStack");
       })
       .catch((error) => {
-        this.setState({ loading: false });
+        this.setState({ email: '', password: '', loading: false });
         alert("Account creation failed: " + error.message);
       });
 
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
-        // Updates the user attributes:
-        user.updateProfile({ // <-- Update Method here
-          displayName: username
-        }).then(function () {
-          // Profile updated successfully!
-          var displayName = user.displayName;
-          console.log(displayName);
-        }, function (error) {
-          // An error happened.
-          console.log(error);
-        });
+        user.updateProfile({ displayName: username })
+          .then(function () {}, function (error) {
+            console.log(error);
+          });
       }
     });
   }
 
   goToLogin() {
+    this.setState({ email: "", password: "" })
     this.props.navigation.navigate("Login");
   }
 
@@ -63,8 +57,9 @@ export default class SignupScreen extends Component {
           <List>
             <ListItem>
               <InputGroup>
-                <Icon name="ios-person" style={{ color: '#67BBF2' }} />
+                <Icon name="person" style={{ color: '#67BBF2' }} />
                 <Input
+                  autoCapitalize = 'none'
                   onChangeText={(text) => this.setState({ username: text })}
                   value={this.state.username}
                   placeholder={"Username"} />
@@ -73,8 +68,9 @@ export default class SignupScreen extends Component {
 
             <ListItem>
               <InputGroup>
-                <Icon name="ios-mail" style={{ color: '#67BBF2' }} />
+                <Icon name="mail" style={{ color: '#67BBF2' }} />
                 <Input
+                  autoCapitalize = 'none'
                   onChangeText={(text) => this.setState({ email: text })}
                   value={this.state.email}
                   placeholder={"Email Address"} />
@@ -83,7 +79,7 @@ export default class SignupScreen extends Component {
 
             <ListItem>
               <InputGroup>
-                <Icon name="ios-unlock" style={{ color: '#67BBF2' }} />
+                <Icon name="unlock" style={{ color: '#67BBF2' }} />
                 <Input
                   onChangeText={(text) => this.setState({ password: text })}
                   value={this.state.password}

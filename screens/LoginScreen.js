@@ -27,14 +27,15 @@ export default class LoginScreen extends Component {
         .then(userData => {
           this.setState({ loading: false });
           AsyncStorage.setItem("userData", JSON.stringify(userData));
+          
+          this.setState({ email: "", password: "" })
           this.props.navigation.navigate("DiscoveriesStack");
         })
         .catch(error => {
-          this.setState({ loading: false });
+          this.setState({ loading: false, email: "", password: "" });
           alert("Login Failed. Please try again" + error);
         });
 
-      // Get the username if user exist
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
           var displayName = user.displayName;
@@ -44,6 +45,7 @@ export default class LoginScreen extends Component {
     }
 
     goToSignup() {
+      this.setState({ email: "", password: "" })
       this.props.navigation.navigate("Signup");
     }
 
@@ -57,8 +59,9 @@ export default class LoginScreen extends Component {
           <List>
             <ListItem>
               <InputGroup>
-                  <Icon name="ios-person" style={{ color: "#67BBF2" }} />
+                  <Icon name="person" style={{ color: "#67BBF2" }} />
                   <Input
+                    autoCapitalize = 'none'
                     onChangeText={text => this.setState({ email: text })}
                     value={this.state.email}
                     placeholder={"Email Address"}
@@ -68,7 +71,7 @@ export default class LoginScreen extends Component {
 
             <ListItem>
               <InputGroup>
-                  <Icon name="ios-unlock" style={{ color: "#67BBF2" }} />
+                  <Icon name="unlock" style={{ color: "#67BBF2" }} />
                   <Input
                     onChangeText={text => this.setState({ password: text })}
                     value={this.state.password}
