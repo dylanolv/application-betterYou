@@ -159,7 +159,8 @@ const styles = StyleSheet.create({
       flex: 1, 
       resizeMode: 'cover', 
       height: 200, 
-      width: 320
+      width: 320,
+      alignSelf: 'center'
     },
     txt: {
       paddingTop: 10

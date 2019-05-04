@@ -16,7 +16,7 @@ export default class DiscoveryComponent extends Component {
     }
 
     static propTypes = {
-        discoveries: PropTypes.array.isRequired
+        discovery: PropTypes.array.isRequired
     };
 
     onPressStar(index) {
@@ -142,7 +142,8 @@ const styles = StyleSheet.create({
     flex: 1, 
     resizeMode: 'cover', 
     height: 200, 
-    width: 370
+    width: 320,
+    alignSelf: 'center'
   },
   txt: {
     paddingTop: 10
