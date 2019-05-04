@@ -16,6 +16,8 @@ export default class DiscoveriesScreen extends Component {
         ),
       };
     };
+
+    _isMounted = false;
   
     constructor(props) {
       super(props);
@@ -27,15 +29,22 @@ export default class DiscoveriesScreen extends Component {
     }
 
     componentDidMount() {
+      this._isMounted = true;
       this.props.navigation.setParams({ handleNavigation: this.goToAccount })
 
       firebase.database().ref("discoveries/").on('value', (snapshot) => {
         let data = snapshot.val();
         let discoveries = Object.values(data);
-        this.setState({discoveries: discoveries, loading: false});
+        if (this._isMounted) {
+          this.setState({discoveries: discoveries, loading: false});
+        }
       });
     }
-    
+
+    componentWillUnmount() {
+      this._isMounted = false;
+    }
+      
     goToAccount = () => {
       this.props.navigation.navigate('Account')
     }

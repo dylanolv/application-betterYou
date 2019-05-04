@@ -11,6 +11,8 @@ export default class DiscoveryScreen extends Component {
       };
     };
 
+    _isMounted = false;
+
     constructor(props) {
       super(props);
   
@@ -21,14 +23,21 @@ export default class DiscoveryScreen extends Component {
     }
 
     componentDidMount() {
+      this._isMounted = true;
 		  const { navigation } = this.props;
       const index = navigation.getParam('index');
       firebase.database().ref("discoveries/" + index).on('value', (snapshot) => {
         let data = snapshot.val();
         let discovery = this.state.discovery;
         discovery.push(data);
-        this.setState({discovery: discovery, loading: false});
+        if (this._isMounted) {
+          this.setState({discovery: discovery, loading: false});
+        }
       });
+    }
+
+    componentWillUnmount() {
+      this._isMounted = false;
     }
     
     render() {   

@@ -21,6 +21,8 @@ export default class CategoriesScreen extends Component {
         headerTitle: 'Catégories'
       };
     };
+
+    _isMounted = false;
   
     constructor(props) {
       super(props);
@@ -32,6 +34,8 @@ export default class CategoriesScreen extends Component {
     }
 
     componentDidMount() {
+      this._isMounted = true;
+
       firebase.database().ref("discoveries/").orderByChild('category').on('value', (snapshot) => {
         let childData = [];
         let i = -1;
@@ -48,8 +52,14 @@ export default class CategoriesScreen extends Component {
           return categoriesData.indexOf(item) >= index;
         });
 
-        this.setState({ loading: false, categories: categorieDataFiltered  });
+        if (this._isMounted) {
+          this.setState({ loading: false, categories: categorieDataFiltered  });
+        }
       });
+    }
+
+    componentWillUnmount() {
+      this._isMounted = false;
     }
     
     render() {   

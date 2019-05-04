@@ -10,6 +10,8 @@ export default class CategoryScreen extends Component {
         title: navigation.getParam('category')
       };
     };
+
+    _isMounted = false;
   
     constructor(props) {
       super(props);
@@ -21,6 +23,8 @@ export default class CategoryScreen extends Component {
     }
 
     componentDidMount() {
+      this._isMounted = true;
+
 		  const { navigation } = this.props;
       const category = navigation.getParam('category');
 
@@ -37,8 +41,14 @@ export default class CategoryScreen extends Component {
           }
         });
         
-        this.setState({ discoveries: categoriesData, loading: false});
+        if (this._isMounted) {
+          this.setState({ discoveries: categoriesData, loading: false});
+        }
       });
+    }
+
+    componentWillUnmount() {
+      this._isMounted = false;
     }
     
     render() {   

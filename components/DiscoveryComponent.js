@@ -6,6 +6,8 @@ import * as firebase from "firebase";
 
 export default class DiscoveryComponent extends Component {
     
+    _isMounted = false;
+
     constructor(props) {
         super(props)
         this.state = {
@@ -19,6 +21,14 @@ export default class DiscoveryComponent extends Component {
         discovery: PropTypes.array.isRequired
     };
 
+    componentDidMount() {
+      this._isMounted = true;
+    }
+
+    componentWillUnmount() {
+      this._isMounted = false;
+    }
+
     onPressStar(index) {
         let tabStar = this.state.tabStarSelected;
 
@@ -29,7 +39,9 @@ export default class DiscoveryComponent extends Component {
           tabStar.push(index); 
         }
 
-        this.setState({ tabStarSelected: tabStar })
+        if (this._isMounted) {
+          this.setState({ tabStarSelected: tabStar })
+        }
     }
     
     onPressUp(index, upvotes, downvotes) {
@@ -44,13 +56,15 @@ export default class DiscoveryComponent extends Component {
           firebase.database().ref("discoveries/").child(index).update({'upvotes': (upvotes+=1) })
           tabUp.push(index); 
         }
-  
+
         if (tabDown.includes(index)) { 
           firebase.database().ref("discoveries/").child(index).update({'downvotes': (downvotes-=1) })
           tabDown.splice( tabDown.indexOf(index), 1 );
         }
-  
-        this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
+
+        if (this._isMounted) {
+          this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
+        }
     }
     
     onPressDown(index, upvotes, downvotes) {
@@ -71,7 +85,9 @@ export default class DiscoveryComponent extends Component {
         tabUp.splice( tabUp.indexOf(index), 1 );
       }
 
-      this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
+      if (this._isMounted) {
+        this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
+      }
     }
     
     render() {
