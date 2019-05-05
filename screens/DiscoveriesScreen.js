@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { Container, Content, Icon } from 'native-base';
+import { Container, Content, Icon, Header, Item, Input, Button, Text } from 'native-base';
 import DiscoveriesComponent from '../components/DiscoveriesComponent';
 import * as firebase from "firebase";
 
@@ -30,20 +30,40 @@ export default class DiscoveriesScreen extends Component {
 
     componentDidMount() {
       this._isMounted = true;
+      this.getDiscoveries();
+    }
+
+    componentWillUnmount() {
+      this._isMounted = false;
+    }
+
+    getDiscoveries() {
       this.props.navigation.setParams({ handleNavigation: this.goToAccount })
 
-      firebase.database().ref("discoveries/").on('value', (snapshot) => {
+      firebase.database().ref("discoveries/").once('value', (snapshot) => {
         let data = snapshot.val();
         let discoveries = Object.values(data);
+    
         if (this._isMounted) {
           this.setState({discoveries: discoveries, loading: false});
         }
       });
     }
 
-    componentWillUnmount() {
-      this._isMounted = false;
-    }
+    // searchFilterFunction = text => {    
+    //   let tabDiscoveries = this.state.discoveries;
+    //   let newTabDiscoveries = [];
+    //   const textData = text.toUpperCase();
+
+    //   tabDiscoveries.filter((discovery) => {
+    //     const titleDiscovery = discovery.title.toUpperCase();
+
+    //     if (titleDiscovery == textData) {
+    //       newTabDiscoveries.push(discovery)
+    //       this.setState({ discoveries: newTabDiscoveries });  
+    //     }
+    //   })
+    // };
       
     goToAccount = () => {
       this.props.navigation.navigate('Account')
@@ -61,6 +81,15 @@ export default class DiscoveriesScreen extends Component {
         return (
           <Container>
             <Content> 
+              {/* <Header searchBar>
+                <Item>
+                  <Icon name="search" />
+                  <Input placeholder="Search" onChangeText={text => this.searchFilterFunction(text)} />
+                </Item>
+                <Button transparent>
+                  <Text>Search</Text>
+                </Button>
+              </Header> */}
               <DiscoveriesComponent navigation={this.props.navigation} discoveries={this.state.discoveries} />
             </Content>
           </Container>
