@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { AsyncStorage, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Card, CardItem, Text, Button, Icon, Left, Body } from 'native-base';
 import PropTypes from 'prop-types';
 import * as firebase from "firebase";
@@ -18,11 +18,13 @@ export default class DiscoveriesComponent extends Component {
     }
 
     static propTypes = {
-        discoveries: PropTypes.array.isRequired
+        discoveries: PropTypes.array.isRequired,
+        currentUserId: PropTypes.string.isRequired
     };
 
     componentDidMount() {
       this._isMounted = true;
+      // AsyncStorage.setItem("userInfos", JSON.stringify(this.props.currentUserId));
     }
 
     componentWillUnmount() {

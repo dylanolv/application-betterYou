@@ -35,10 +35,11 @@ export default class DiscoveryScreen extends Component {
 		  const { navigation } = this.props;
       const index = navigation.getParam('index');
 
-      firebase.database().ref("discoveries/" + index).on('value', (snapshot) => {
+      firebase.database().ref("discoveries/").on('value', (snapshot) => {
         let data = snapshot.val();
-        let discovery = this.state.discovery;
-        discovery.push(data);
+        let discoveries = Object.values(data);
+        let discovery = []
+        discovery.push(discoveries[index]);
 
         if (this._isMounted) {
           this.setState({discovery: discovery, loading: false});

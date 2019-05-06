@@ -5,7 +5,7 @@ import * as firebase from 'firebase';
 
 export default class SignupScreen extends Component {
   static navigationOptions = {
-    title: "Signup"
+    title: "S'inscrire"
   };
 
   constructor(props) {
@@ -22,23 +22,31 @@ export default class SignupScreen extends Component {
   signup() {
     const { username } = this.state;
 
-    this.setState({ loading: true });
+    this.setState({ 
+      loading: true 
+    });
 
     firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => {
-        alert('Your account was created!');
-        this.setState({ email: '', password: '', loading: false });
+        alert('Votre compte a été créé avec succès');
+        this.setState({ username: '', email: '', password: '', loading: false });
         this.props.navigation.navigate("DiscoveriesStack");
       })
       .catch((error) => {
-        this.setState({ email: '', password: '', loading: false });
-        alert("Account creation failed: " + error.message);
+        this.setState({ username: '', email: '', password: '', loading: false });
+        alert("Un problème est surrvenu lors de la création de votre compte, voici l'erreur : " + error.message);
       });
 
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         user.updateProfile({ displayName: username })
-          .then(function () {}, function (error) {
+          .then(function () {
+            firebase.database().ref('users/' + user.uid).set({
+              favorites : '',
+              upvotes : '',
+              downvotes : ''
+              });
+          }, function (error) {
             console.log(error);
           });
       }
@@ -50,73 +58,73 @@ export default class SignupScreen extends Component {
     this.props.navigation.navigate("Login");
   }
 
-  render() {
-    const content = this.state.loading ? (<ActivityIndicator size="large" />)
-      : (
-        <Content>
-          <List>
-            <ListItem>
-              <InputGroup>
-                <Icon name="person" style={{ color: '#67BBF2' }} />
-                <Input
-                  autoCapitalize = 'none'
-                  onChangeText={(text) => this.setState({ username: text })}
-                  value={this.state.username}
-                  placeholder={"Username"} />
-              </InputGroup>
-            </ListItem>
-
-            <ListItem>
-              <InputGroup>
-                <Icon name="mail" style={{ color: '#67BBF2' }} />
-                <Input
-                  autoCapitalize = 'none'
-                  onChangeText={(text) => this.setState({ email: text })}
-                  value={this.state.email}
-                  placeholder={"Email Address"} />
-              </InputGroup>
-            </ListItem>
-
-            <ListItem>
-              <InputGroup>
-                <Icon name="unlock" style={{ color: '#67BBF2' }} />
-                <Input
-                  onChangeText={(text) => this.setState({ password: text })}
-                  value={this.state.password}
-                  secureTextEntry={true}
-                  placeholder={"Password"} />
-              </InputGroup>
-            </ListItem>
-          </List>
-
-          <Button rounded style={styles.primaryButton} onPress={this.signup.bind(this)}>
-            <Text>Signup</Text>
-          </Button>
-
-          <Button rounded style={styles.primaryButton} onPress={this.goToLogin.bind(this)}>
-            <Text>Go to Login</Text>
-          </Button>
-        </Content>
-      );
-    return (
-      <Container>
-        {content}
-      </Container>
-    );
+  render() {   
+    if (this.state.loading) {
+      return (
+        <View style={[styles.container, styles.horizontal]}>
+          <ActivityIndicator size="large" color="#67BBF2" />
+        </View>
+      )
+    }
+    else {
+      return (
+        <Container>
+          <Content>
+            <List>
+              <ListItem>
+                <InputGroup>
+                  <Icon name="person" style={{ color: '#67BBF2' }} />
+                  <Input
+                    autoCapitalize = 'none'
+                    onChangeText={(text) => this.setState({ username: text })}
+                    value={this.state.username}
+                    placeholder={"Nom d'utilisateur"} />
+                </InputGroup>
+              </ListItem>
+              <ListItem>
+                <InputGroup>
+                  <Icon name="mail" style={{ color: '#67BBF2' }} />
+                  <Input
+                    autoCapitalize = 'none'
+                    onChangeText={(text) => this.setState({ email: text })}
+                    value={this.state.email}
+                    placeholder={"E-mail"} />
+                </InputGroup>
+              </ListItem>
+              <ListItem>
+                <InputGroup>
+                  <Icon name="unlock" style={{ color: '#67BBF2' }} />
+                  <Input
+                    onChangeText={(text) => this.setState({ password: text })}
+                    value={this.state.password}
+                    secureTextEntry={true}
+                    placeholder={"Mot de passe"} />
+                </InputGroup>
+              </ListItem>
+            </List>
+            <Button rounded style={styles.primaryButton} onPress={this.signup.bind(this)}>
+              <Text>S'inscrire</Text>
+            </Button>
+            <Button rounded style={styles.primaryButton} onPress={this.goToLogin.bind(this)}>
+              <Text>Se connecter</Text>
+            </Button>
+          </Content>
+        </Container>
+      )
+    }  
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "stretch",
-    flex: 1
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center'
   },
-  body: {
-    flex: 9,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#F5FCFF"
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10
   },
   primaryButton: {
     margin: 10,

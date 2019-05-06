@@ -37,7 +37,7 @@ export default class AccountScreen extends React.Component {
   }
 
   logout() {
-    // logout, once that is complete, return the user to the login screen.
+  //   // logout, once that is complete, return the user to the login screen.
     AsyncStorage.removeItem('userData').then(() => {
       firebase.auth().signOut().then(() => {
         this.props.navigation.goBack();

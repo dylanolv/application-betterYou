@@ -24,6 +24,7 @@ export default class DiscoveriesScreen extends Component {
   
       this.state = {
         discoveries: [],
+        currentUserId: '',
         loading: true
       };
     }
@@ -31,6 +32,7 @@ export default class DiscoveriesScreen extends Component {
     componentDidMount() {
       this._isMounted = true;
       this.getDiscoveries();
+      this.getUserId();
     }
 
     componentWillUnmount() {
@@ -40,12 +42,21 @@ export default class DiscoveriesScreen extends Component {
     getDiscoveries() {
       this.props.navigation.setParams({ handleNavigation: this.goToAccount })
 
-      firebase.database().ref("discoveries/").once('value', (snapshot) => {
+      firebase.database().ref("discoveries/").on('value', (snapshot) => {
         let data = snapshot.val();
         let discoveries = Object.values(data);
     
         if (this._isMounted) {
-          this.setState({discoveries: discoveries, loading: false});
+          this.setState({discoveries: discoveries, loading: false });
+        }
+      });
+    }
+
+    getUserId() {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          var uid = user.uid;
+          this.setState({currentUserId: uid });
         }
       });
     }
@@ -80,7 +91,7 @@ export default class DiscoveriesScreen extends Component {
       else {
         return (
           <Container>
-            <Content> 
+            <Content>
               {/* <Header searchBar>
                 <Item>
                   <Icon name="search" />
@@ -90,7 +101,7 @@ export default class DiscoveriesScreen extends Component {
                   <Text>Search</Text>
                 </Button>
               </Header> */}
-              <DiscoveriesComponent navigation={this.props.navigation} discoveries={this.state.discoveries} />
+              <DiscoveriesComponent navigation={this.props.navigation} currentUserId={this.state.currentUserId} discoveries={this.state.discoveries} />
             </Content>
           </Container>
         )
