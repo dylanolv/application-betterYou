@@ -26,7 +26,7 @@ export default class AccountScreen extends React.Component {
     //Check if userData is stored on device else open Login
     AsyncStorage.getItem('userData').then((user_data_json) => {
       let user_data = JSON.parse(user_data_json);
-      console.log(user_data)
+      console.log(user_data.uid)
       if (user_data != null) {
         this.props.navigation.navigate("AccountStack");
       }
@@ -48,9 +48,9 @@ export default class AccountScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Button onPress={this.logout.bind(this)}>
-          <Text>Logout</Text>
+      <View style={[styles.container, styles.horizontal]}>
+        <Button rounded style={styles.primaryButton} onPress={this.logout.bind(this)}>
+          <Text>Se déconnecter</Text>
         </Button>
       </View>
     );
@@ -59,22 +59,20 @@ export default class AccountScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "stretch",
-    flex: 1
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center'
   },
-  body: {
-    flex: 9,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#F5FCFF"
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10
   },
   primaryButton: {
     margin: 10,
     padding: 15,
     justifyContent: "center",
     alignSelf: "center",
-    backgroundColor: "#67BBF2",
-    width: 150
+    backgroundColor: "#67BBF2"
   }
 });

@@ -24,7 +24,6 @@ export default class DiscoveriesScreen extends Component {
   
       this.state = {
         discoveries: [],
-        currentUserId: '',
         loading: true
       };
     }
@@ -32,7 +31,6 @@ export default class DiscoveriesScreen extends Component {
     componentDidMount() {
       this._isMounted = true;
       this.getDiscoveries();
-      this.getUserId();
     }
 
     componentWillUnmount() {
@@ -52,14 +50,14 @@ export default class DiscoveriesScreen extends Component {
       });
     }
 
-    getUserId() {
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          var uid = user.uid;
-          this.setState({currentUserId: uid });
-        }
-      });
-    }
+    // getUserId() {
+    //   firebase.auth().onAuthStateChanged((user) => {
+    //     if (user) {
+    //       var uid = user.uid;
+    //       this.setState({currentUserId: uid });
+    //     }
+    //   });
+    // }
 
     // searchFilterFunction = text => {    
     //   let tabDiscoveries = this.state.discoveries;
@@ -101,7 +99,7 @@ export default class DiscoveriesScreen extends Component {
                   <Text>Search</Text>
                 </Button>
               </Header> */}
-              <DiscoveriesComponent navigation={this.props.navigation} currentUserId={this.state.currentUserId} discoveries={this.state.discoveries} />
+              <DiscoveriesComponent navigation={this.props.navigation} discoveries={this.state.discoveries} />
             </Content>
           </Container>
         )

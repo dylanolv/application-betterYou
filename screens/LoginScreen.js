@@ -92,7 +92,7 @@ export default class LoginScreen extends Component {
               <List>
                 <ListItem>
                   <InputGroup>
-                      <Icon name="person" style={{ color: "#67BBF2" }} />
+                      <Icon name="mail" style={{ color: "#67BBF2" }} />
                       <Input
                         autoCapitalize = 'none'
                         onChangeText={text => this.setState({ email: text })}
@@ -146,6 +146,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     backgroundColor: "#67BBF2",
-    width: 150
+    width: 170
   }
 });

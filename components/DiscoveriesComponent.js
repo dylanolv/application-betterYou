@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { AsyncStorage, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Card, CardItem, Text, Button, Icon, Left, Body } from 'native-base';
 import PropTypes from 'prop-types';
 import * as firebase from "firebase";
-
 export default class DiscoveriesComponent extends Component {
     
     _isMounted = false;
@@ -13,32 +12,93 @@ export default class DiscoveriesComponent extends Component {
         this.state = {
             tabStarSelected: [],
             tabUpBtnSelected: [],
-            tabDownBtnSelected: []
+            tabDownBtnSelected: [],
+            currentUserId: undefined
         };
     }
 
     static propTypes = {
-        discoveries: PropTypes.array.isRequired,
-        currentUserId: PropTypes.string.isRequired
+        discoveries: PropTypes.array.isRequired
     };
+
+    componentWillMount() {
+      this.load()
+      this.props.navigation.addListener('willFocus', this.load)
+    }
+    
+    load = () => {
+      this.getFavorites();
+    }
 
     componentDidMount() {
       this._isMounted = true;
-      // AsyncStorage.setItem("userInfos", JSON.stringify(this.props.currentUserId));
+      if (this._isMounted) {
+        this._interval = setInterval(() => {
+          this.getFavorites();
+        }, 2000);
+      }
+
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          this.setState({ currentUserId: user.uid });
+        }
+        else {
+          this.setState({ currentUserId: undefined });
+        }
+      })
+
     }
 
     componentWillUnmount() {
       this._isMounted = false;
+      
+      if (this._isMounted == false) {
+        clearInterval(this._interval);
+      }
+    }
+
+    getFavorites() {
+      let uid = this.state.currentUserId;
+
+      if (uid != undefined) {
+        firebase.database().ref("favorites/").child(uid).on('value', (snapshot) => {
+          let data = snapshot.val();
+          let fav = Object(data);
+          let tabStarFav = this.state.tabStarSelected;
+          tabStarFav = JSON.parse(fav.tabId);
+
+          if (this._isMounted) {
+            this.setState({ tabStarSelected: tabStarFav })
+          }
+        })
+      }
+      else {
+        let favorites = [];
+        if (this._isMounted) {
+          this.setState({ tabStarSelected: favorites })
+        }
+      }
     }
 
     onPressStar(index) {
-        let tabStar = this.state.tabStarSelected;
+        let tabStar = this.state.tabStarSelected;    
+        let uid = this.state.currentUserId;
 
         if (tabStar.includes(index)) { 
           tabStar.splice( tabStar.indexOf(index), 1 );
+          
+          if (uid != undefined) {
+            tabStarString = JSON.stringify(tabStar)
+            firebase.database().ref("favorites/").child(uid).update({'tabId': tabStarString })
+          }
         }
         else {
           tabStar.push(index); 
+
+          if (uid != undefined) {
+            tabStarString = JSON.stringify(tabStar)
+            firebase.database().ref("favorites/").child(uid).update({'tabId': tabStarString })
+          }
         }
 
         if (this._isMounted) {
@@ -47,9 +107,9 @@ export default class DiscoveriesComponent extends Component {
     }
     
     onPressUp(index, upvotes, downvotes) {
-        let tabUp = this.state.tabUpBtnSelected;
-        let tabDown = this.state.tabDownBtnSelected;
-
+      let tabUp = this.state.tabUpBtnSelected;
+      let tabDown = this.state.tabDownBtnSelected;
+      
         if (tabUp.includes(index)) { 
           firebase.database().ref("discoveries/").child(index).update({'upvotes': (upvotes-=1) })
           tabUp.splice( tabUp.indexOf(index), 1 );
@@ -112,7 +172,7 @@ export default class DiscoveriesComponent extends Component {
                                 </Body>
                             </Left>
                             <TouchableOpacity style={[styles.star]} onPress={()=>this.onPressStar(index)}>
-                                <Icon style={[styles.iconStar]} name={(this.state.tabStarSelected.includes(index))?'star':'star-outline'}/>
+                                <Icon style={[styles.iconStar]} name={(this.state.tabStarSelected && this.state.tabStarSelected.includes(index))?'star':'star-outline'}/>
                             </TouchableOpacity>
                         </CardItem>
                         <CardItem>
@@ -127,13 +187,13 @@ export default class DiscoveriesComponent extends Component {
                             </Body>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>
-                            <Button style={[(this.state.tabUpBtnSelected.includes(index))?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressUp(index, discovery.upvotes, discovery.downvotes)}>
-                                <Icon style={(this.state.tabUpBtnSelected.includes(index))?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-up'/>
-                                <Text style={(this.state.tabUpBtnSelected.includes(index))?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.upvotes}</Text>
+                            <Button style={[(this.state.tabUpBtnSelected && this.state.tabUpBtnSelected.includes(index))?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressUp(index, discovery.upvotes, discovery.downvotes)}>
+                                <Icon style={(this.state.tabUpBtnSelected && this.state.tabUpBtnSelected.includes(index))?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-up'/>
+                                <Text style={(this.state.tabUpBtnSelected && this.state.tabUpBtnSelected.includes(index))?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.upvotes}</Text>
                             </Button>
-                            <Button style={[(this.state.tabDownBtnSelected.includes(index))?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressDown(index, discovery.upvotes, discovery.downvotes)}>
-                                <Icon style={(this.state.tabDownBtnSelected.includes(index))?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-down'/>
-                                <Text style={(this.state.tabDownBtnSelected.includes(index))?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.downvotes}</Text>
+                            <Button style={[(this.state.tabDownBtnSelected && this.state.tabDownBtnSelected.includes(index))?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressDown(index, discovery.upvotes, discovery.downvotes)}>
+                                <Icon style={(this.state.tabDownBtnSelected && this.state.tabDownBtnSelected.includes(index))?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-down'/>
+                                <Text style={(this.state.tabDownBtnSelected && this.state.tabDownBtnSelected.includes(index))?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.downvotes}</Text>
                             </Button>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>

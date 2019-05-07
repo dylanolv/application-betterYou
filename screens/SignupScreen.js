@@ -41,11 +41,9 @@ export default class SignupScreen extends Component {
       if (user) {
         user.updateProfile({ displayName: username })
           .then(function () {
-            firebase.database().ref('users/' + user.uid).set({
-              favorites : '',
-              upvotes : '',
-              downvotes : ''
-              });
+            firebase.database().ref('favorites/' + user.uid).set({
+              tabId : '[-1]'
+            });
           }, function (error) {
             console.log(error);
           });
@@ -132,6 +130,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     backgroundColor: "#67BBF2",
-    width: 150
+    width: 170
   }
 });
