@@ -4,165 +4,24 @@ import { Card, CardItem, Text, Button, Icon, Left, Body } from 'native-base';
 import PropTypes from 'prop-types';
 import * as firebase from "firebase";
 
-export default class DiscoveriesComponent extends Component {
+export default class FavoritesComponent extends Component {
     
-    _isMounted = false;
-
     constructor(props) {
         super(props)
-        this.state = {
-            tabStarSelected: [],
-            tabUpBtnSelected: [],
-            tabDownBtnSelected: [],
-            currentUserId: undefined
-        };
+        this.state = {};
     }
 
     static propTypes = {
-        discoveries: PropTypes.array.isRequired
+        favorites: PropTypes.array.isRequired
     };
 
-    componentWillMount() {
-      this.load()
-      this.props.navigation.addListener('willFocus', this.load)
-    }
-    
-    load = () => {
-      this.getFavorites();
-    }
-
     componentDidMount() {
-      this._isMounted = true;
-      if (this._isMounted) {
-        this._interval = setInterval(() => {
-          this.getFavorites();
-        }, 2000);
-      }
-
-      firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          this.setState({ currentUserId: user.uid });
-        }
-        else {
-          this.setState({ currentUserId: undefined });
-        }
-      })
-
-    }
-
-    componentWillUnmount() {
-      this._isMounted = false;
-      
-      if (this._isMounted == false) {
-        clearInterval(this._interval);
-      }
-    }
-
-    getFavorites() {
-      let uid = this.state.currentUserId;
-
-      if (uid != undefined) {
-        firebase.database().ref("favorites/").child(uid).on('value', (snapshot) => {
-          let data = snapshot.val();
-          let fav = Object(data);
-          let tabStarFav = this.state.tabStarSelected;
-          tabStarFav = JSON.parse(fav.tabId);
-
-          if (this._isMounted) {
-            this.setState({ tabStarSelected: tabStarFav })
-          }
-        })
-      }
-      else {
-        let favorites = [];
-        if (this._isMounted) {
-          this.setState({ tabStarSelected: favorites })
-        }
-      }
-    }
-
-    onPressStar(index) {
-        let tabStar = this.state.tabStarSelected;    
-        let uid = this.state.currentUserId;
-
-        if (tabStar.includes(index)) { 
-          tabStar.splice( tabStar.indexOf(index), 1 );
-          
-          if (uid != undefined) {
-            tabStarString = JSON.stringify(tabStar)
-            firebase.database().ref("favorites/").child(uid).update({'tabId': tabStarString })
-          }
-        }
-        else {
-          tabStar.push(index); 
-
-          if (uid != undefined) {
-            tabStarString = JSON.stringify(tabStar)
-            firebase.database().ref("favorites/").child(uid).update({'tabId': tabStarString })
-          }
-        }
-
-        if (this._isMounted) {
-          this.setState({ tabStarSelected: tabStar })
-        }
-    }
-    
-    onPressUp(index, upvotes, downvotes) {
-      let tabUp = this.state.tabUpBtnSelected;
-      let tabDown = this.state.tabDownBtnSelected;
-      
-        if (tabUp.includes(index)) { 
-          firebase.database().ref("discoveries/").child(index).update({'upvotes': (upvotes-=1) })
-          tabUp.splice( tabUp.indexOf(index), 1 );
-        }
-        else {
-          firebase.database().ref("discoveries/").child(index).update({'upvotes': (upvotes+=1) })
-          tabUp.push(index); 
-        }
-  
-        if (tabDown.includes(index)) { 
-          firebase.database().ref("discoveries/").child(index).update({'downvotes': (downvotes-=1) })
-          tabDown.splice( tabDown.indexOf(index), 1 );
-        }
-  
-        if (this._isMounted) {
-          this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
-        }
-    }
-    
-    onPressDown(index, upvotes, downvotes) {
-      let tabUp = this.state.tabUpBtnSelected;
-      let tabDown = this.state.tabDownBtnSelected;
-
-      if (tabDown.includes(index)) {
-        firebase.database().ref("discoveries/").child(index).update({'downvotes': (downvotes-=1) })
-        tabDown.splice( tabDown.indexOf(index), 1 );
-      }
-      else {
-        firebase.database().ref("discoveries/").child(index).update({'downvotes': (downvotes+=1) })
-        tabDown.push(index); 
-      }
-
-      if (tabUp.includes(index)) { 
-        firebase.database().ref("discoveries/").child(index).update({'upvotes': (upvotes-=1) })
-        tabUp.splice( tabUp.indexOf(index), 1 );
-      }
-
-      if (this._isMounted) {
-        this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
-      }
-    }
-    
-    goToDiscovery = (index, title) => {
-      this.props.navigation.navigate('Discovery', {
-        index: index,
-        title: title
-      })
+        console.log(this.props.favorites)
     }
     
     render() {
         return (
-            this.props.discoveries.map((discovery, index) => {
+            this.props.favorites.map((discovery, index) => {
                 return (
                     <Card key={index} style={{flex: 0}}>
                         <CardItem>

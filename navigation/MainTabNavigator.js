@@ -11,6 +11,7 @@ import AccountScreen from '../screens/AccountScreen';
 import DiscoveryScreen from '../screens/DiscoveryScreen';
 import CategoriesScreen from '../screens/CategoriesScreen';
 import CategoryScreen from '../screens/CategoryScreen';
+import FavoritesScreen from '../screens/FavoritesScreen';
 
 const AuthenticationStack = createStackNavigator({
   Login: LoginScreen,
@@ -18,7 +19,26 @@ const AuthenticationStack = createStackNavigator({
 });
 
 AuthenticationStack.navigationOptions = {
-  tabBarLabel: 'Login',
+  tabBarLabel: 'Connexion',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
+    />
+  ),
+};
+const DiscoveriesStack = createStackNavigator({
+  Discoveries: DiscoveriesScreen,
+  Discovery: DiscoveryScreen,
+  Account: AccountScreen
+});
+
+DiscoveriesStack.navigationOptions = {
+  tabBarLabel: 'Accueil',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -50,14 +70,12 @@ CategoriesStack.navigationOptions = {
   ),
 };
 
-const DiscoveriesStack = createStackNavigator({
-  Discoveries: DiscoveriesScreen,
-  Discovery: DiscoveryScreen,
-  Account: AccountScreen
+const FavoritesStack = createStackNavigator({
+  Favorites: FavoritesScreen
 });
 
-DiscoveriesStack.navigationOptions = {
-  tabBarLabel: 'Home',
+FavoritesStack.navigationOptions = {
+  tabBarLabel: 'Favoris',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -93,6 +111,7 @@ export default createBottomTabNavigator(
     AuthenticationStack,
     DiscoveriesStack,
     CategoriesStack,
+    FavoritesStack,
     QuoteStack
   },
   {
