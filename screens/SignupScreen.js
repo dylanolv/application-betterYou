@@ -42,7 +42,7 @@ export default class SignupScreen extends Component {
         user.updateProfile({ displayName: username })
           .then(function () {
             firebase.database().ref('favorites/' + user.uid).set({
-              tabId : '[-1]'
+              tabId : '[]'
             });
           }, function (error) {
             console.log(error);

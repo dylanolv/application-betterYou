@@ -22,15 +22,6 @@ export default class FavoritesScreen extends Component {
         currentUserId: undefined,
         loading: true
       };
-
-      firebase.auth().onAuthStateChanged(user => {
-          if (user) {
-              this.setState({ currentUserId: user.uid });
-          }
-          else {
-              this.setState({ currentUserId: undefined });
-          }
-      })
     }
 
     componentWillMount() {
@@ -49,7 +40,7 @@ export default class FavoritesScreen extends Component {
         setTimeout(() => {this.getFavorites();}, 500)
     }
 
-    async getUserId() {
+    getUserId() {
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 this.setState({ currentUserId: user.uid });

@@ -18,6 +18,8 @@ export default class DiscoveryScreen extends Component {
   
       this.state = {
         discovery: [],
+        isFavorite: false,
+        favorites: [],
         loading: true
       };
     }
@@ -34,15 +36,24 @@ export default class DiscoveryScreen extends Component {
     getDiscovery() {
 		  const { navigation } = this.props;
       const index = navigation.getParam('index');
+      const favorites = navigation.getParam('favorites');
 
       firebase.database().ref("discoveries/").on('value', (snapshot) => {
         let data = snapshot.val();
+        let fav = this.state.isFavorite;
         let discoveries = Object.values(data);
         let discovery = []
         discovery.push(discoveries[index]);
 
+        if (!favorites.includes(index)) {
+          fav = false;
+        }
+        else {
+          fav = true
+        }
+
         if (this._isMounted) {
-          this.setState({discovery: discovery, loading: false});
+          this.setState({ discovery: discovery, isFavorite: fav, favorites: favorites, loading: false });
         }
       });
     }
@@ -59,7 +70,7 @@ export default class DiscoveryScreen extends Component {
         return (
           <Container>
             <Content> 
-              <DiscoveryComponent discovery={this.state.discovery} />
+              <DiscoveryComponent favorites={this.state.favorites} isFavorite={this.state.isFavorite} discovery={this.state.discovery} />
             </Content>
           </Container>
         )

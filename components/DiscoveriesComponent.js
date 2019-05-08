@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Card, CardItem, Text, Button, Icon, Left, Body } from 'native-base';
 import PropTypes from 'prop-types';
+import ReadMore from 'react-native-read-more-text';
 import * as firebase from "firebase";
+import TabSources from '../assets/images/index';
 
 export default class DiscoveriesComponent extends Component {
     
@@ -14,6 +16,9 @@ export default class DiscoveriesComponent extends Component {
             tabStarSelected: [],
             tabUpBtnSelected: [],
             tabDownBtnSelected: [],
+            sources: [],
+            more: false,
+            indexMore: [],
             currentUserId: undefined
         };
     }
@@ -48,6 +53,19 @@ export default class DiscoveriesComponent extends Component {
         }
       })
 
+      // this.props.discoveries.map((item, index) => {
+      //   let tabSources = this.state.sources;
+      //   tabSources.push({
+      //     id: index,
+      //     source: item.image
+      //   })
+        
+      //   if (this._isMounted) {
+      //     this.setState({ sources: tabSources })
+      //   }
+      // })
+
+      console.log(TabSources[0].source)
     }
 
     componentWillUnmount() {
@@ -152,24 +170,56 @@ export default class DiscoveriesComponent extends Component {
         this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
       }
     }
-    
-    goToDiscovery = (index, title) => {
-      this.props.navigation.navigate('Discovery', {
-        index: index,
-        title: title
-      })
+
+    _renderTruncatedFooter = (handlePress) => {
+      return (
+        <TouchableOpacity style={[styles.more]} onPress={handlePress}>
+          <Text style={[styles.moreTxt]}>En savoir plus..</Text>
+        </TouchableOpacity>
+      );
+    }
+  
+    _renderRevealedFooter = (handlePress) => {
+      return (
+        <TouchableOpacity style={[styles.more]} onPress={handlePress}>
+          <Text style={[styles.moreTxt]}>Réduire</Text>
+        </TouchableOpacity>
+      );
     }
     
     render() {
+      // const urlImage = '';
         return (
             this.props.discoveries.map((discovery, index) => {
+              // var storage = firebase.storage();
+              // var storageRef = storage.ref();
+              // var spaceRef = storageRef.child(discovery.image);
+              
+              // // Get the download URL
+              // spaceRef.getDownloadURL().then(function(url) {
+              //   // Insert url into an <img> tag to "download"
+              //   const urlImage = url;
+                
+              // }).catch(function(error) {})
+
+              // const ref = firebase.storage().ref(discovery.image);
+              // // const updateFav = async () => {
+              // //   const url = await ref.getDownloadUrl();
+              // //   return url
+              // // };
+              // ref.getDownloadURL()
+              // .then((url) => {
+              //   const url = url;
+              //     console.log(url);
+              // });
+              // console.log(discovery.image)
                 return (
                     <Card key={index} style={{flex: 0}}>
                         <CardItem>
                             <Left>
                                 <Body>
                                     <Text note>{discovery.category}</Text>
-                                    <Text style={[styles.title]} button onPress={()=>this.goToDiscovery(index, discovery.title)}>{discovery.title}</Text>
+                                    <Text style={[styles.title]}>{discovery.title}</Text>
                                 </Body>
                             </Left>
                             <TouchableOpacity style={[styles.star]} onPress={()=>this.onPressStar(index)}>
@@ -178,13 +228,23 @@ export default class DiscoveriesComponent extends Component {
                         </CardItem>
                         <CardItem>
                             <Body>
-                                <Image source={require('../assets/images/minimalism1.jpg')} style={[styles.img]}/>
-                                <Text style={[styles.txt]} button onPress={()=>this.goToDiscovery(index, discovery.title)}>
-                                    {discovery.content1}
-                                </Text>
-                                <TouchableOpacity style={[styles.more]} onPress={()=>this.goToDiscovery(index, discovery.title)}>
-                                    <Text style={[styles.moreTxt]}>En savoir plus..</Text>
-                                </TouchableOpacity>
+                                <Image source={TabSources[0].source} />
+
+                                {/* {this.state.sources.map((item, i) => (
+                                  <Image
+                                    key={i}
+                                    source={{ uri: item.image }}
+                                    style={[styles.img]}
+                                  />
+                                ))} */}
+
+                                {/* <Image source={{ uri: discovery.image }} style={[styles.img]}/> */}
+                                
+                                <ReadMore numberOfLines={3} renderTruncatedFooter={this._renderTruncatedFooter} renderRevealedFooter={this._renderRevealedFooter} >
+                                  <Text style={[styles.txt]}>
+                                    {discovery.content}
+                                  </Text>
+                                </ReadMore>
                             </Body>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>
@@ -201,10 +261,6 @@ export default class DiscoveriesComponent extends Component {
                             <Button style={[styles.btnShareComment, styles.marginShareCommentButtons]}>
                                 <Icon name='share' style={[styles.iconBtnSelected]}/>
                                 <Text style={[styles.txtBtnSelected]}>Partager</Text>
-                            </Button>
-                            <Button style={[styles.btnShareComment, styles.marginShareCommentButtons]}>
-                                <Icon name='chatboxes' style={[styles.iconBtnSelected]}/>
-                                <Text style={[styles.txtBtnSelected]}>Commenter</Text>
                             </Button>
                         </CardItem>
                     </Card>
@@ -225,8 +281,12 @@ const styles = StyleSheet.create({
       justifyContent: 'space-around',
       padding: 15
     },
+    hidden: {
+      display:'none'
+    },
     title: {
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      width:'80%'
     },
     more: {
       alignSelf: 'flex-end'

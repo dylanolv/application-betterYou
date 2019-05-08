@@ -13,30 +13,54 @@ export default class DiscoveryComponent extends Component {
         this.state = {
             tabStarSelected: [],
             tabUpBtnSelected: [],
-            tabDownBtnSelected: []
+            tabDownBtnSelected: [],
+            currentUserId: undefined
         };
     }
 
     static propTypes = {
-        discovery: PropTypes.array.isRequired
+        discovery: PropTypes.array.isRequired,
+        isFavorite: PropTypes.bool.isRequired,
+        favorites: PropTypes.array.isRequired
     };
 
     componentDidMount() {
-      this._isMounted = true;
+        this._isMounted = true;
+
+        firebase.auth().onAuthStateChanged(user => {
+          if (user) {
+            this.setState({ tabStarSelected: this.props.favorites, currentUserId: user.uid });
+          }
+          else {
+            this.setState({ currentUserId: undefined });
+          }
+        })
     }
 
     componentWillUnmount() {
-      this._isMounted = false;
+        this._isMounted = false;
     }
 
     onPressStar(index) {
-        let tabStar = this.state.tabStarSelected;
+        let tabStar = this.state.tabStarSelected;    
+        let uid = this.state.currentUserId;
+        console.log(this.state.tabStarSelected)
 
         if (tabStar.includes(index)) { 
           tabStar.splice( tabStar.indexOf(index), 1 );
+          
+          if (uid != undefined) {
+            tabStarString = JSON.stringify(tabStar)
+            firebase.database().ref("favorites/").child(uid).update({'tabId': tabStarString })
+          }
         }
         else {
           tabStar.push(index); 
+
+          if (uid != undefined) {
+            tabStarString = JSON.stringify(tabStar)
+            firebase.database().ref("favorites/").child(uid).update({'tabId': tabStarString })
+          }
         }
 
         if (this._isMounted) {
@@ -102,7 +126,7 @@ export default class DiscoveryComponent extends Component {
                                 </Body>
                             </Left>
                             <TouchableOpacity style={[styles.star]} onPress={()=>this.onPressStar(index)}>
-                                <Icon style={[styles.iconStar]} name={(this.state.tabStarSelected.includes(index))?'star':'star-outline'}/>
+                                <Icon style={[styles.iconStar]} name={(this.props.isFavorite && this.state.tabStarSelected.includes(index))?'star':'star-outline'}/>
                             </TouchableOpacity>
                         </CardItem>
                         <CardItem>

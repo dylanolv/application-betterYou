@@ -2,13 +2,20 @@ import React, { Component } from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Card, CardItem, Text, Button, Icon, Left, Body } from 'native-base';
 import PropTypes from 'prop-types';
+import ReadMore from 'react-native-read-more-text';
 import * as firebase from "firebase";
 
 export default class FavoritesComponent extends Component {
     
+    _isMounted = false;
+
     constructor(props) {
         super(props)
-        this.state = {};
+        this.state = {
+            tabStarSelected: [],
+            tabUpBtnSelected: [],
+            tabDownBtnSelected: []
+        };
     }
 
     static propTypes = {
@@ -16,7 +23,88 @@ export default class FavoritesComponent extends Component {
     };
 
     componentDidMount() {
-        console.log(this.props.favorites)
+        this._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    onPressStar(index) {
+        let tabStar = this.state.tabStarSelected;
+
+        if (tabStar.includes(index)) { 
+          tabStar.splice( tabStar.indexOf(index), 1 );
+        }
+        else {
+          tabStar.push(index); 
+        }
+
+        if (this._isMounted) {
+          this.setState({ tabStarSelected: tabStar })
+        }
+    }
+    
+    onPressUp(index, upvotes, downvotes) {
+        let tabUp = this.state.tabUpBtnSelected;
+        let tabDown = this.state.tabDownBtnSelected;
+
+        if (tabUp.includes(index)) { 
+          firebase.database().ref("discoveries/").child(index).update({'upvotes': (upvotes-=1) })
+          tabUp.splice( tabUp.indexOf(index), 1 );
+        }
+        else {
+          firebase.database().ref("discoveries/").child(index).update({'upvotes': (upvotes+=1) })
+          tabUp.push(index); 
+        }
+
+        if (tabDown.includes(index)) { 
+          firebase.database().ref("discoveries/").child(index).update({'downvotes': (downvotes-=1) })
+          tabDown.splice( tabDown.indexOf(index), 1 );
+        }
+
+        if (this._isMounted) {
+          this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
+        }
+    }
+    
+    onPressDown(index, upvotes, downvotes) {
+      let tabUp = this.state.tabUpBtnSelected;
+      let tabDown = this.state.tabDownBtnSelected;
+
+      if (tabDown.includes(index)) {
+        firebase.database().ref("discoveries/").child(index).update({'downvotes': (downvotes-=1) })
+        tabDown.splice( tabDown.indexOf(index), 1 );
+      }
+      else {
+        firebase.database().ref("discoveries/").child(index).update({'downvotes': (downvotes+=1) })
+        tabDown.push(index); 
+      }
+
+      if (tabUp.includes(index)) { 
+        firebase.database().ref("discoveries/").child(index).update({'upvotes': (upvotes-=1) })
+        tabUp.splice( tabUp.indexOf(index), 1 );
+      }
+
+      if (this._isMounted) {
+        this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
+      }
+    }
+
+    _renderTruncatedFooter = (handlePress) => {
+      return (
+        <TouchableOpacity style={[styles.more]} onPress={handlePress}>
+          <Text style={[styles.moreTxt]}>En savoir plus..</Text>
+        </TouchableOpacity>
+      );
+    }
+  
+    _renderRevealedFooter = (handlePress) => {
+      return (
+        <TouchableOpacity style={[styles.more]} onPress={handlePress}>
+          <Text style={[styles.moreTxt]}>Réduire</Text>
+        </TouchableOpacity>
+      );
     }
     
     render() {
@@ -38,12 +126,11 @@ export default class FavoritesComponent extends Component {
                         <CardItem>
                             <Body>
                                 <Image source={require('../assets/images/minimalism1.jpg')} style={[styles.img]}/>
-                                <Text style={[styles.txt]} button onPress={()=>this.goToDiscovery(index, discovery.title)}>
-                                    {discovery.content1}
-                                </Text>
-                                <TouchableOpacity style={[styles.more]} onPress={()=>this.goToDiscovery(index, discovery.title)}>
-                                    <Text style={[styles.moreTxt]}>En savoir plus..</Text>
-                                </TouchableOpacity>
+                                <ReadMore numberOfLines={3} renderTruncatedFooter={this._renderTruncatedFooter} renderRevealedFooter={this._renderRevealedFooter} >
+                                  <Text style={[styles.txt]}>
+                                    {discovery.content}
+                                  </Text>
+                                </ReadMore>
                             </Body>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>
@@ -60,10 +147,6 @@ export default class FavoritesComponent extends Component {
                             <Button style={[styles.btnShareComment, styles.marginShareCommentButtons]}>
                                 <Icon name='share' style={[styles.iconBtnSelected]}/>
                                 <Text style={[styles.txtBtnSelected]}>Partager</Text>
-                            </Button>
-                            <Button style={[styles.btnShareComment, styles.marginShareCommentButtons]}>
-                                <Icon name='chatboxes' style={[styles.iconBtnSelected]}/>
-                                <Text style={[styles.txtBtnSelected]}>Commenter</Text>
                             </Button>
                         </CardItem>
                     </Card>
