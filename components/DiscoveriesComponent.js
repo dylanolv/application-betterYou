@@ -4,7 +4,6 @@ import { Card, CardItem, Text, Button, Icon, Left, Body } from 'native-base';
 import PropTypes from 'prop-types';
 import ReadMore from 'react-native-read-more-text';
 import * as firebase from "firebase";
-import TabSources from '../assets/images/index';
 
 export default class DiscoveriesComponent extends Component {
     
@@ -16,9 +15,6 @@ export default class DiscoveriesComponent extends Component {
             tabStarSelected: [],
             tabUpBtnSelected: [],
             tabDownBtnSelected: [],
-            sources: [],
-            more: false,
-            indexMore: [],
             currentUserId: undefined
         };
     }
@@ -53,19 +49,6 @@ export default class DiscoveriesComponent extends Component {
         }
       })
 
-      // this.props.discoveries.map((item, index) => {
-      //   let tabSources = this.state.sources;
-      //   tabSources.push({
-      //     id: index,
-      //     source: item.image
-      //   })
-        
-      //   if (this._isMounted) {
-      //     this.setState({ sources: tabSources })
-      //   }
-      // })
-
-      console.log(TabSources[0].source)
     }
 
     componentWillUnmount() {
@@ -188,31 +171,8 @@ export default class DiscoveriesComponent extends Component {
     }
     
     render() {
-      // const urlImage = '';
         return (
             this.props.discoveries.map((discovery, index) => {
-              // var storage = firebase.storage();
-              // var storageRef = storage.ref();
-              // var spaceRef = storageRef.child(discovery.image);
-              
-              // // Get the download URL
-              // spaceRef.getDownloadURL().then(function(url) {
-              //   // Insert url into an <img> tag to "download"
-              //   const urlImage = url;
-                
-              // }).catch(function(error) {})
-
-              // const ref = firebase.storage().ref(discovery.image);
-              // // const updateFav = async () => {
-              // //   const url = await ref.getDownloadUrl();
-              // //   return url
-              // // };
-              // ref.getDownloadURL()
-              // .then((url) => {
-              //   const url = url;
-              //     console.log(url);
-              // });
-              // console.log(discovery.image)
                 return (
                     <Card key={index} style={{flex: 0}}>
                         <CardItem>
@@ -228,18 +188,7 @@ export default class DiscoveriesComponent extends Component {
                         </CardItem>
                         <CardItem>
                             <Body>
-                                <Image source={TabSources[0].source} />
-
-                                {/* {this.state.sources.map((item, i) => (
-                                  <Image
-                                    key={i}
-                                    source={{ uri: item.image }}
-                                    style={[styles.img]}
-                                  />
-                                ))} */}
-
-                                {/* <Image source={{ uri: discovery.image }} style={[styles.img]}/> */}
-                                
+                                <Image source={{ uri: discovery.image }} style={[styles.img]}/>
                                 <ReadMore numberOfLines={3} renderTruncatedFooter={this._renderTruncatedFooter} renderRevealedFooter={this._renderRevealedFooter} >
                                   <Text style={[styles.txt]}>
                                     {discovery.content}
