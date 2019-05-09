@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { Container, Content, Icon, Header, Item, Input, Button, Text } from 'native-base';
+import { Alert, View, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { Container, Content, Icon } from 'native-base';
 import DiscoveriesComponent from '../components/DiscoveriesComponent';
+import { isAuthenticated } from '../src/helpers';
 import * as firebase from "firebase";
 
 export default class DiscoveriesScreen extends Component {
@@ -50,15 +51,6 @@ export default class DiscoveriesScreen extends Component {
       });
     }
 
-    // getUserId() {
-    //   firebase.auth().onAuthStateChanged((user) => {
-    //     if (user) {
-    //       var uid = user.uid;
-    //       this.setState({currentUserId: uid });
-    //     }
-    //   });
-    // }
-
     // searchFilterFunction = text => {    
     //   let tabDiscoveries = this.state.discoveries;
     //   let newTabDiscoveries = [];
@@ -75,9 +67,21 @@ export default class DiscoveriesScreen extends Component {
     // };
       
     goToAccount = () => {
-      this.props.navigation.navigate('Account')
+      if (isAuthenticated() == true) {
+        this.props.navigation.navigate('Account')
+      }
+      else {
+        Alert.alert(
+          'Veuillez vous connecter',
+          'Pour accèder à votre compte, veuillez d\'abord vous connecter',
+          [
+            {text: 'Ok'}
+          ]
+        );
+      }
+      this.props.navigation.navigate('Login')
     }
-    
+  
     render() {   
       if (this.state.loading) {
         return (
@@ -112,6 +116,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center'
+  },
+  hidden: {
+    display:'none'
+  },
+  notHidden: {
+
   },
   horizontal: {
     flexDirection: 'row',

@@ -13,31 +13,29 @@ export default class AccountScreen extends React.Component {
     this.state = {};
   }
 
-  componentWillMount(){
-    this.load()
-    this.props.navigation.addListener('willFocus', this.load)
-  }
+  // componentWillMount(){
+  //   this.load()
+  //   this.props.navigation.addListener('willFocus', this.load)
+  // }
   
-  load = () => {
-    this.getUserData();
-  }
+  // load = () => {
+  //   this.getUserData();
+  // }
 
-  getUserData() {
-    //Check if userData is stored on device else open Login
-    AsyncStorage.getItem('userData').then((user_data_json) => {
-      let user_data = JSON.parse(user_data_json);
-      console.log(user_data)
-      if (user_data != null) {
-        this.props.navigation.navigate("AccountStack");
-      }
-      else {
-        this.props.navigation.navigate("DiscoveriesStack");
-      }
-    });
-  }
+  // getUserData() {
+  //   AsyncStorage.getItem('userData').then((user_data_json) => {
+  //     let user_data = JSON.parse(user_data_json);
+  //     console.log(user_data)
+  //     if (user_data != null) {
+  //       this.props.navigation.navigate("AccountStack");
+  //     }
+  //     else {
+  //       this.props.navigation.navigate("DiscoveriesStack");
+  //     }
+  //   });
+  // }
 
   logout() {
-  //   // logout, once that is complete, return the user to the login screen.
     AsyncStorage.removeItem('userData').then(() => {
       firebase.auth().signOut().then(() => {
         this.props.navigation.goBack();

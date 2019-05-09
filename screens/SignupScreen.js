@@ -1,5 +1,5 @@
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
-import { Header, Title, Container, Content, List, ListItem, InputGroup, Input, Icon, Text, Picker, Button } from 'native-base';
+import { Alert, View, ActivityIndicator, StyleSheet } from 'react-native';
+import { Container, Content, List, ListItem, InputGroup, Input, Icon, Text, Button } from 'native-base';
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 
@@ -17,6 +17,7 @@ export default class SignupScreen extends Component {
       password: '',
       loading: false
     }
+
   }
 
   signup() {
@@ -28,13 +29,25 @@ export default class SignupScreen extends Component {
 
     firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => {
-        alert('Votre compte a été créé avec succès');
         this.setState({ username: '', email: '', password: '', loading: false });
         this.props.navigation.navigate("DiscoveriesStack");
+        Alert.alert(
+          'Compte créé',
+          'Votre compte a été créé avec succès',
+          [
+            {text: 'Ok'}
+          ]
+        );
       })
       .catch((error) => {
         this.setState({ username: '', email: '', password: '', loading: false });
-        alert("Un problème est surrvenu lors de la création de votre compte, voici l'erreur : " + error.message);
+        Alert.alert(
+          'Problème lors de la création',
+          'Un problème est surrvenu lors de la création de votre compte, veuillez réessayer',
+          [
+            {text: 'Ok'}
+          ]
+        );
       });
 
     firebase.auth().onAuthStateChanged(function (user) {

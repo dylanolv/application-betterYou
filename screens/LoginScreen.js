@@ -1,5 +1,5 @@
-import { AsyncStorage, View, ActivityIndicator, StyleSheet } from "react-native";
-import { Header, Container, Title, Content, List, ListItem, InputGroup, Input, Icon, Text, Button } from "native-base";
+import { Alert, AsyncStorage, View, ActivityIndicator, StyleSheet } from "react-native";
+import { Container, Content, List, ListItem, InputGroup, Input, Icon, Text, Button } from "native-base";
 import React, { Component } from "react";
 import * as firebase from "firebase";
 
@@ -31,7 +31,13 @@ export default class LoginScreen extends Component {
         })
         .catch(error => {
           this.setState({ email: "", password: "", loading: false });
-          alert("La connexion à échouée, veuillez réessayer" + error);
+          Alert.alert(
+            'Problème de connexion',
+            'La connexion à échouée, veuillez réessayer',
+            [
+              {text: 'Ok'}
+            ]
+          );
         });
     }
 

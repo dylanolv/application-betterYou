@@ -48,7 +48,6 @@ export default class DiscoveriesComponent extends Component {
           this.setState({ currentUserId: undefined });
         }
       })
-
     }
 
     componentWillUnmount() {
@@ -64,13 +63,21 @@ export default class DiscoveriesComponent extends Component {
 
       if (uid != undefined) {
         firebase.database().ref("favorites/").child(uid).on('value', (snapshot) => {
-          let data = snapshot.val();
-          let fav = Object(data);
-          let tabStarFav = this.state.tabStarSelected;
-          tabStarFav = JSON.parse(fav.tabId);
-
-          if (this._isMounted) {
-            this.setState({ tabStarSelected: tabStarFav })
+          if (snapshot != []) {
+            let data = snapshot.val();
+            let fav = Object(data);
+            let tabStarFav = this.state.tabStarSelected;
+            tabStarFav = JSON.parse(fav.tabId);
+  
+            if (this._isMounted) {
+              this.setState({ tabStarSelected: tabStarFav })
+            }
+          }
+          else {
+            let favorites = [];
+            if (this._isMounted) {
+              this.setState({ tabStarSelected: favorites })
+            }
           }
         })
       }
@@ -229,7 +236,7 @@ export default class DiscoveriesComponent extends Component {
                             </Button>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>
-                            <Button style={[styles.btnShareComment, styles.marginShareCommentButtons]} onPress={()=>this.onShare(discovery.title, discovery.content)}>
+                            <Button style={[styles.btnShareComment]} onPress={()=>this.onShare(discovery.title, discovery.content)}>
                                 <Icon name='share' style={[styles.iconBtnSelected]}/>
                                 <Text style={[styles.txtBtnSelected]}>Partager</Text>
                             </Button>
@@ -325,9 +332,6 @@ const styles = StyleSheet.create({
     txtBtnNotSelected: {
       fontWeight: 'bold',
       color: '#67BBF2'
-    },
-    marginShareCommentButtons: {
-      marginHorizontal: 5
     },
     marginUpDownButtons: {
       marginHorizontal: 7
