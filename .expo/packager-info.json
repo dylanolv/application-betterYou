@@ -1,10 +1,10 @@
 {
-  "expoServerPort": null,
+  "expoServerPort": 19000,
   "webpackServerPort": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://gy-7ct.anonymous.application-betteryou.exp.direct",
+  "packagerNgrokUrl": "https://packager.gy-7ct.anonymous.application-betteryou.exp.direct",
+  "ngrokPid": 11328,
   "devToolsPort": 19002,
-  "packagerPort": null,
-  "packagerPid": null
+  "packagerPort": 19001,
+  "packagerPid": 7864
 }

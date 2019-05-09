@@ -131,7 +131,7 @@ export default class DiscoveryComponent extends Component {
                         </CardItem>
                         <CardItem>
                             <Body>
-                                <Image source={require('../assets/images/minimalism1.jpg')} style={[styles.img]}/>
+                                {/* <Image source={require('../assets/images/minimalism1.jpg')} style={[styles.img]}/> */}
                                 <Text style={[styles.txt]}>
                                     {item.content2}
                                 </Text>

@@ -125,7 +125,7 @@ export default class FavoritesComponent extends Component {
                         </CardItem>
                         <CardItem>
                             <Body>
-                                <Image source={require('../assets/images/minimalism1.jpg')} style={[styles.img]}/>
+                                {/* <Image source={require('../assets/images/minimalism1.jpg')} style={[styles.img]}/> */}
                                 <ReadMore numberOfLines={3} renderTruncatedFooter={this._renderTruncatedFooter} renderRevealedFooter={this._renderRevealedFooter} >
                                   <Text style={[styles.txt]}>
                                     {discovery.content}
