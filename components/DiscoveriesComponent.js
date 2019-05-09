@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, Share } from 'react-native';
 import { Card, CardItem, Text, Button, Icon, Left, Body } from 'native-base';
 import PropTypes from 'prop-types';
 import ReadMore from 'react-native-read-more-text';
@@ -169,6 +169,26 @@ export default class DiscoveriesComponent extends Component {
         </TouchableOpacity>
       );
     }
+    onShare = async (title, content) => {
+      try {
+        const result = await Share.share({
+          title : title,
+          message: content
+        });
+  
+        if (result.action === Share.sharedAction) {
+          if (result.activityType) {
+            // shared with activity type of result.activityType
+          } else {
+            // shared
+          }
+        } else if (result.action === Share.dismissedAction) {
+          // dismissed
+        }
+      } catch (error) {
+        alert(error.message);
+      }
+    };
     
     render() {
         return (
@@ -187,8 +207,10 @@ export default class DiscoveriesComponent extends Component {
                             </TouchableOpacity>
                         </CardItem>
                         <CardItem>
+                          <Image source={{ uri: discovery.image }} style={[styles.img]}/>
+                        </CardItem>
+                        <CardItem>
                             <Body>
-                                <Image source={{ uri: discovery.image }} style={[styles.img]}/>
                                 <ReadMore numberOfLines={3} renderTruncatedFooter={this._renderTruncatedFooter} renderRevealedFooter={this._renderRevealedFooter} >
                                   <Text style={[styles.txt]}>
                                     {discovery.content}
@@ -207,7 +229,7 @@ export default class DiscoveriesComponent extends Component {
                             </Button>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>
-                            <Button style={[styles.btnShareComment, styles.marginShareCommentButtons]}>
+                            <Button style={[styles.btnShareComment, styles.marginShareCommentButtons]} onPress={()=>this.onShare(discovery.title, discovery.content)}>
                                 <Icon name='share' style={[styles.iconBtnSelected]}/>
                                 <Text style={[styles.txtBtnSelected]}>Partager</Text>
                             </Button>
@@ -251,7 +273,6 @@ const styles = StyleSheet.create({
       alignSelf: 'center'
     },
     txt: {
-      paddingTop: 10
     },
     star: {
       alignSelf: 'flex-end'
@@ -267,7 +288,8 @@ const styles = StyleSheet.create({
       height: '84%',
       width: '35%',
       justifyContent: 'center',
-      elevation: 0
+      elevation: 0,
+      borderRadius:15
     },
     btnNotSelected: {
       backgroundColor: 'transparent',
@@ -276,7 +298,8 @@ const styles = StyleSheet.create({
       height: '84%',
       width: '35%',
       justifyContent: 'center',
-      elevation: 0
+      elevation: 0,
+      borderRadius:15
     },
     btnShareComment: {
       backgroundColor: '#67BBF2',
@@ -284,7 +307,8 @@ const styles = StyleSheet.create({
       borderColor: '#67BBF2',
       height: '84%',
       width: '50%',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      borderRadius:15
     },
     iconBtnSelected: {
       fontSize: 35,
