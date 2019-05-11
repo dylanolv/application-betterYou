@@ -1,11 +1,11 @@
-import { Alert, AsyncStorage, View, ActivityIndicator, StyleSheet } from "react-native";
-import { Container, Content, List, ListItem, InputGroup, Input, Icon, Text, Button } from "native-base";
+import { Alert, View, ActivityIndicator, StyleSheet } from "react-native";
+import { Container, Content, Input, Icon, Text, Button, Form, Item } from "native-base";
 import React, { Component } from "react";
 import * as firebase from "firebase";
 
 export default class LoginScreen extends Component {
     static navigationOptions = {
-      title: "Se connecter"
+      title: "Connexion"
     };
 
     constructor(props) {
@@ -25,9 +25,7 @@ export default class LoginScreen extends Component {
 
       firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
         .then(userData => {
-          AsyncStorage.setItem("userData", JSON.stringify(userData));
-          this.setState({ email: "", password: "", loading: false })
-          this.props.navigation.navigate("DiscoveriesStack");
+          this.props.navigation.navigate("AuthLoading");
         })
         .catch(error => {
           this.setState({ email: "", password: "", loading: false });
@@ -92,42 +90,35 @@ export default class LoginScreen extends Component {
         )
       }
       else {
-        return ( 
-          <Container>
+        return (
+          <Container style={[styles.container, styles.horizontal]}>
             <Content>
-              <List>
-                <ListItem>
-                  <InputGroup>
-                      <Icon name="mail" style={{ color: "#67BBF2" }} />
-                      <Input
-                        autoCapitalize = 'none'
-                        onChangeText={text => this.setState({ email: text })}
-                        value={this.state.email}
-                        placeholder={"E-mail"}
-                      />
-                  </InputGroup>
-                </ListItem>
-                <ListItem>
-                  <InputGroup>
-                      <Icon name="unlock" style={{ color: "#67BBF2" }} />
-                      <Input
-                        onChangeText={text => this.setState({ password: text })}
-                        value={this.state.password}
-                        secureTextEntry={true}
-                        placeholder={"Mot de passe"}
-                      />
-                  </InputGroup>
-                </ListItem>
-              </List>
-              <Button rounded style={styles.primaryButton} onPress={this.login.bind(this)}>
-                <Text>Se connecter</Text>
-              </Button>
-              <Button rounded onPress={this.goToSignup.bind(this)} style={styles.primaryButton}>
-                <Text>S'inscrire</Text>
-              </Button>
-              {/* <Button rounded onPress={this.getUserInAsynStorage.bind(this)} style={styles.primaryButton}>
-                <Text>aaaaaaa</Text>
-              </Button> */}
+              <Form>
+                <Item  style={[styles.item]}>
+                  <Icon name="mail" style={{ color: "#67BBF2" }} />
+                  <Input
+                    autoCapitalize = 'none'
+                    onChangeText={text => this.setState({ email: text })}
+                    value={this.state.email}
+                    placeholder={"E-mail"}
+                  />
+                </Item >
+                <Item  style={[styles.item]}>
+                  <Icon name="unlock" style={{ color: "#67BBF2" }} />
+                  <Input
+                    onChangeText={text => this.setState({ password: text })}
+                    value={this.state.password}
+                    secureTextEntry={true}
+                    placeholder={"Mot de passe"}
+                  />
+                </Item >
+                <Button rounded style={[styles.buttonFirst, styles.primaryButton]} onPress={this.login.bind(this)}>
+                  <Text>Se connecter</Text>
+                </Button>
+                <Button rounded onPress={this.goToSignup.bind(this)} style={styles.primaryButton}>
+                  <Text>S'inscrire</Text>
+                </Button>
+              </Form>
             </Content>
           </Container>
         )
@@ -146,8 +137,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     padding: 10
   },
+  item: {
+    width: '70%',
+    alignSelf: "center"
+  },
+  buttonFirst: {
+    marginTop: 30,
+  },
   primaryButton: {
-    margin: 10,
+    marginVertical: 10,
     padding: 15,
     justifyContent: "center",
     alignSelf: "center",

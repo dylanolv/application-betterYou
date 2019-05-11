@@ -14,13 +14,13 @@ export default class DiscoveriesComponent extends Component {
         this.state = {
             tabStarSelected: [],
             tabUpBtnSelected: [],
-            tabDownBtnSelected: [],
-            currentUserId: undefined
+            tabDownBtnSelected: []
         };
     }
 
     static propTypes = {
-        discoveries: PropTypes.array.isRequired
+      discoveries: PropTypes.array.isRequired,
+      currentUserId: PropTypes.string.isRequired
     };
 
     componentWillMount() {
@@ -39,15 +39,6 @@ export default class DiscoveriesComponent extends Component {
           this.getFavorites();
         }, 2000);
       }
-
-      firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          this.setState({ currentUserId: user.uid });
-        }
-        else {
-          this.setState({ currentUserId: undefined });
-        }
-      })
     }
 
     componentWillUnmount() {
@@ -59,7 +50,7 @@ export default class DiscoveriesComponent extends Component {
     }
 
     getFavorites() {
-      let uid = this.state.currentUserId;
+      let uid = this.props.currentUserId;
 
       if (uid != undefined) {
         firebase.database().ref("favorites/").child(uid).on('value', (snapshot) => {
@@ -89,12 +80,12 @@ export default class DiscoveriesComponent extends Component {
       }
     }
 
-    onPressStar(index) {
+    onPressStar(discoveryId) {
         let tabStar = this.state.tabStarSelected;    
-        let uid = this.state.currentUserId;
+        let uid = this.props.currentUserId;
 
-        if (tabStar.includes(index)) { 
-          tabStar.splice( tabStar.indexOf(index), 1 );
+        if (tabStar.includes(discoveryId)) { 
+          tabStar.splice( tabStar.indexOf(discoveryId), 1 );
           
           if (uid != undefined) {
             tabStarString = JSON.stringify(tabStar)
@@ -102,7 +93,7 @@ export default class DiscoveriesComponent extends Component {
           }
         }
         else {
-          tabStar.push(index); 
+          tabStar.push(discoveryId); 
 
           if (uid != undefined) {
             tabStarString = JSON.stringify(tabStar)
@@ -176,23 +167,20 @@ export default class DiscoveriesComponent extends Component {
         </TouchableOpacity>
       );
     }
+    
     onShare = async (title, content) => {
       try {
         const result = await Share.share({
           title : title,
           message: content
         });
-  
         if (result.action === Share.sharedAction) {
-          if (result.activityType) {
-            // shared with activity type of result.activityType
-          } else {
-            // shared
-          }
-        } else if (result.action === Share.dismissedAction) {
-          // dismissed
-        }
-      } catch (error) {
+          if (result.activityType) {}
+          else {}
+        } 
+        else if (result.action === Share.dismissedAction) {}
+      } 
+      catch (error) {
         alert(error.message);
       }
     };
@@ -209,8 +197,8 @@ export default class DiscoveriesComponent extends Component {
                                     <Text style={[styles.title]}>{discovery.title}</Text>
                                 </Body>
                             </Left>
-                            <TouchableOpacity style={[styles.star]} onPress={()=>this.onPressStar(index)}>
-                                <Icon style={[styles.iconStar]} name={(this.state.tabStarSelected && this.state.tabStarSelected.includes(index))?'star':'star-outline'}/>
+                            <TouchableOpacity style={[styles.star]} onPress={()=>this.onPressStar(discovery.discoveryId)}>
+                                <Icon style={[styles.iconStar]} name={(this.state.tabStarSelected && this.state.tabStarSelected.includes(discovery.discoveryId))?'star':'star-outline'}/>
                             </TouchableOpacity>
                         </CardItem>
                         <CardItem>

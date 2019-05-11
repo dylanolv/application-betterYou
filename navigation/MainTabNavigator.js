@@ -1,36 +1,15 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-
 import TabBarIcon from '../components/TabBarIcon';
 import DiscoveriesScreen from '../screens/DiscoveriesScreen';
 import QuoteScreen from '../screens/QuoteScreen';
-import LoginScreen from '../screens/LoginScreen';
-import SignupScreen from '../screens/SignupScreen';
 import AccountScreen from '../screens/AccountScreen';
 import DiscoveryScreen from '../screens/DiscoveryScreen';
 import CategoriesScreen from '../screens/CategoriesScreen';
 import CategoryScreen from '../screens/CategoryScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 
-const AuthenticationStack = createStackNavigator({
-  Login: LoginScreen,
-  Signup: SignupScreen
-});
-
-AuthenticationStack.navigationOptions = {
-  tabBarLabel: 'Connexion',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
-    />
-  ),
-};
 const DiscoveriesStack = createStackNavigator({
   Discoveries: DiscoveriesScreen,
   Discovery: DiscoveryScreen,
@@ -42,11 +21,7 @@ DiscoveriesStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+      name={`md-home`}
     />
   ),
 };
@@ -61,11 +36,7 @@ CategoriesStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+      name={`md-list`}
     />
   ),
 };
@@ -79,11 +50,7 @@ FavoritesStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+      name={`md-star`}
     />
   ),
 };
@@ -97,18 +64,13 @@ QuoteStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+      name={`md-quote`}
     />
   ),
 };
 
 export default createBottomTabNavigator(
   {
-    AuthenticationStack,
     DiscoveriesStack,
     CategoriesStack,
     FavoritesStack,

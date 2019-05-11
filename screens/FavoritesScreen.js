@@ -43,10 +43,14 @@ export default class FavoritesScreen extends Component {
     getUserId() {
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
+              if (this._isMounted) {
                 this.setState({ currentUserId: user.uid });
+              }
             }
             else {
+              if (this._isMounted) {
                 this.setState({ currentUserId: undefined });
+              }
             }
         })
     }

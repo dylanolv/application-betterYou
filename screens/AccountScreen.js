@@ -1,56 +1,71 @@
 import React from "react";
-import { AsyncStorage, View, StyleSheet } from "react-native";
-import { Text, Button } from "native-base";
+import { View, StyleSheet, ActivityIndicator, AsyncStorage } from "react-native";
+import { Container, Content, Card, CardItem, Text, Icon, Body, Button } from 'native-base';
 import * as firebase from "firebase";
 
 export default class AccountScreen extends React.Component {
   static navigationOptions = {
-    title: "Account"
+    title: "Compte"
   };
+
+  _isMounted = false;
 
   constructor(props) {
     super(props)
-    this.state = {};
+    this.state = {
+      displayName: '',
+      email: '',
+    };
+    this.getUserData();
   }
 
-  // componentWillMount(){
-  //   this.load()
-  //   this.props.navigation.addListener('willFocus', this.load)
-  // }
-  
-  // load = () => {
-  //   this.getUserData();
-  // }
+  componentDidMount() {
+    this._isMounted = true;
+  }
 
-  // getUserData() {
-  //   AsyncStorage.getItem('userData').then((user_data_json) => {
-  //     let user_data = JSON.parse(user_data_json);
-  //     console.log(user_data)
-  //     if (user_data != null) {
-  //       this.props.navigation.navigate("AccountStack");
-  //     }
-  //     else {
-  //       this.props.navigation.navigate("DiscoveriesStack");
-  //     }
-  //   });
-  // }
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  getUserData() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        let providerData = user.providerData
+        providerData.map((item) => {
+          if (this._isMounted) {
+            this.setState({displayName: item.displayName, email: item.email });
+          }
+        })
+      }
+    })
+  }
 
   logout() {
     AsyncStorage.removeItem('userData').then(() => {
       firebase.auth().signOut().then(() => {
-        this.props.navigation.goBack();
-        this.props.navigation.navigate("Login");
+        this.props.navigation.navigate("AuthStack");
       });  
     });
   }
 
   render() {
     return (
-      <View style={[styles.container, styles.horizontal]}>
-        <Button rounded style={styles.primaryButton} onPress={this.logout.bind(this)}>
-          <Text>Se déconnecter</Text>
-        </Button>
-      </View>
+      <Container style={[styles.container, styles.horizontal]}>
+      <Content padder>
+        <Card>
+          <CardItem bordered>
+            <Body>
+              <Text style={[styles.title]}>Vos informations</Text>
+              <Text style={[styles.user]}>{this.state.displayName}</Text>
+              <Text style={[styles.email]}>{this.state.email}</Text>
+            </Body>
+            <Button rounded style={styles.primaryButton} onPress={this.logout.bind(this)}>
+              <Text>Se déconnecter</Text>
+            </Button>
+          </CardItem>
+        </Card>
+      </Content>
+      </Container>
     );
   }
 }
@@ -65,6 +80,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10
+  },
+  author: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginBottom: 10
+  },
+  content: {
+    fontSize: 16,
+    alignSelf: 'center',
+    textAlign: 'center'
   },
   primaryButton: {
     margin: 10,

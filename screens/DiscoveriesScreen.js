@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Alert, View, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Container, Content, Icon } from 'native-base';
 import DiscoveriesComponent from '../components/DiscoveriesComponent';
-import { isAuthenticated } from '../src/helpers';
 import * as firebase from "firebase";
 
 export default class DiscoveriesScreen extends Component {
@@ -25,30 +24,70 @@ export default class DiscoveriesScreen extends Component {
   
       this.state = {
         discoveries: [],
+        currentUserId: undefined,
         loading: true
       };
+      this.getDiscoveries();
     }
 
     componentDidMount() {
       this._isMounted = true;
-      this.getDiscoveries();
     }
 
     componentWillUnmount() {
       this._isMounted = false;
     }
 
-    getDiscoveries() {
-      this.props.navigation.setParams({ handleNavigation: this.goToAccount })
+    // getFavorites() {
 
-      firebase.database().ref("discoveries/").on('value', (snapshot) => {
-        let data = snapshot.val();
-        let discoveries = Object.values(data);
+    //   if (uid != undefined) {
+    //     firebase.database().ref("favorites/").child(uid).on('value', (snapshot) => {
+    //       if (snapshot != []) {
+    //         let data = snapshot.val();
+    //         let fav = Object(data);
+    //         let tabStarFav = this.state.tabStarSelected;
+    //         tabStarFav = JSON.parse(fav.tabId);
+  
+    //         if (this._isMounted) {
+    //           this.setState({ tabStarSelected: tabStarFav })
+    //         }
+    //       }
+    //       else {
+    //         let favorites = [];
+    //         if (this._isMounted) {
+    //           this.setState({ tabStarSelected: favorites })
+    //         }
+    //       }
+    //     })
+    //   }
+    //   else {
+    //     let favorites = [];
+    //     if (this._isMounted) {
+    //       this.setState({ tabStarSelected: favorites })
+    //     }
+    //   }
+    // }
     
-        if (this._isMounted) {
-          this.setState({discoveries: discoveries, loading: false });
+    getDiscoveries() {
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          let uid = user.uid;
+          this.props.navigation.setParams({ handleNavigation: this.goToAccount })
+          firebase.database().ref("discoveries/").on('value', (snapshot) => {
+            let data = snapshot.val();
+            let discoveries = Object.values(data);
+        
+            if (this._isMounted) {
+              this.setState({ currentUserId: uid, discoveries: discoveries, loading: false });
+            }
+          });
         }
-      });
+        else {
+          if (this._isMounted) {
+            this.setState({ currentUserId: undefined, loading: false });
+          }
+        }
+      })
     }
 
     // searchFilterFunction = text => {    
@@ -67,19 +106,7 @@ export default class DiscoveriesScreen extends Component {
     // };
       
     goToAccount = () => {
-      if (isAuthenticated() == true) {
-        this.props.navigation.navigate('Account')
-      }
-      else {
-        Alert.alert(
-          'Veuillez vous connecter',
-          'Pour accèder à votre compte, veuillez d\'abord vous connecter',
-          [
-            {text: 'Ok'}
-          ]
-        );
-      }
-      this.props.navigation.navigate('Login')
+      this.props.navigation.navigate('Account')
     }
   
     render() {   
@@ -103,7 +130,7 @@ export default class DiscoveriesScreen extends Component {
                   <Text>Search</Text>
                 </Button>
               </Header> */}
-              <DiscoveriesComponent navigation={this.props.navigation} discoveries={this.state.discoveries} />
+              <DiscoveriesComponent navigation={this.props.navigation} currentUserId={this.state.currentUserId} discoveries={this.state.discoveries} />
             </Content>
           </Container>
         )
@@ -116,12 +143,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center'
-  },
-  hidden: {
-    display:'none'
-  },
-  notHidden: {
-
   },
   horizontal: {
     flexDirection: 'row',

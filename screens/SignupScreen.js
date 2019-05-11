@@ -1,11 +1,11 @@
-import { Alert, View, ActivityIndicator, StyleSheet } from 'react-native';
-import { Container, Content, List, ListItem, InputGroup, Input, Icon, Text, Button } from 'native-base';
+import { AsyncStorage, Alert, View, ActivityIndicator, StyleSheet } from 'react-native';
+import { Container, Content, Input, Icon, Text, Button, Form, Item } from "native-base";
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 
 export default class SignupScreen extends Component {
   static navigationOptions = {
-    title: "S'inscrire"
+    title: "Inscription"
   };
 
   constructor(props) {
@@ -23,31 +23,33 @@ export default class SignupScreen extends Component {
   signup() {
     const { username } = this.state;
 
-    this.setState({ 
-      loading: true 
-    });
+    this.setState({ loading: true });
 
     firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => {
-        this.setState({ username: '', email: '', password: '', loading: false });
-        this.props.navigation.navigate("DiscoveriesStack");
-        Alert.alert(
-          'Compte créé',
-          'Votre compte a été créé avec succès',
-          [
-            {text: 'Ok'}
-          ]
-        );
+        firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+        .then(userData => {
+          this.props.navigation.navigate("AuthLoading");
+          Alert.alert(
+            'Compte créé',
+            'Votre compte a été créé avec succès',
+            [
+              {text: 'Ok'}
+            ]
+          );
+        })
       })
       .catch((error) => {
-        this.setState({ username: '', email: '', password: '', loading: false });
-        Alert.alert(
-          'Problème lors de la création',
-          'Un problème est surrvenu lors de la création de votre compte, veuillez réessayer',
-          [
-            {text: 'Ok'}
-          ]
-        );
+        if (error != null) {
+          this.setState({ username: '', email: '', password: '', loading: false });
+          Alert.alert(
+            'Problème lors de la création',
+            'Un problème est surrvenu lors de la création de votre compte, veuillez réessayer',
+            [
+              {text: 'Ok'}
+            ]
+          );
+        }
       });
 
     firebase.auth().onAuthStateChanged(function (user) {
@@ -79,46 +81,43 @@ export default class SignupScreen extends Component {
     }
     else {
       return (
-        <Container>
+        <Container style={[styles.container, styles.horizontal]}>
           <Content>
-            <List>
-              <ListItem>
-                <InputGroup>
-                  <Icon name="person" style={{ color: '#67BBF2' }} />
-                  <Input
-                    autoCapitalize = 'none'
-                    onChangeText={(text) => this.setState({ username: text })}
-                    value={this.state.username}
-                    placeholder={"Nom d'utilisateur"} />
-                </InputGroup>
-              </ListItem>
-              <ListItem>
-                <InputGroup>
-                  <Icon name="mail" style={{ color: '#67BBF2' }} />
-                  <Input
-                    autoCapitalize = 'none'
-                    onChangeText={(text) => this.setState({ email: text })}
-                    value={this.state.email}
-                    placeholder={"E-mail"} />
-                </InputGroup>
-              </ListItem>
-              <ListItem>
-                <InputGroup>
-                  <Icon name="unlock" style={{ color: '#67BBF2' }} />
-                  <Input
-                    onChangeText={(text) => this.setState({ password: text })}
-                    value={this.state.password}
-                    secureTextEntry={true}
-                    placeholder={"Mot de passe"} />
-                </InputGroup>
-              </ListItem>
-            </List>
-            <Button rounded style={styles.primaryButton} onPress={this.signup.bind(this)}>
-              <Text>S'inscrire</Text>
-            </Button>
-            <Button rounded style={styles.primaryButton} onPress={this.goToLogin.bind(this)}>
-              <Text>Se connecter</Text>
-            </Button>
+            <Form>
+              <Item  style={[styles.item]}>
+                <Icon name="person" style={{ color: "#67BBF2" }} />
+                <Input
+                  autoCapitalize = 'none'
+                  onChangeText={text => this.setState({ username: text })}
+                  value={this.state.username}
+                  placeholder={"Nom d'utilisateur"}
+                />
+              </Item >
+              <Item  style={[styles.item]}>
+                <Icon name="mail" style={{ color: "#67BBF2" }} />
+                <Input
+                  autoCapitalize = 'none'
+                  onChangeText={text => this.setState({ email: text })}
+                  value={this.state.email}
+                  placeholder={"E-mail"}
+                />
+              </Item >
+              <Item  style={[styles.item]}>
+                <Icon name="unlock" style={{ color: "#67BBF2" }} />
+                <Input
+                  onChangeText={text => this.setState({ password: text })}
+                  value={this.state.password}
+                  secureTextEntry={true}
+                  placeholder={"Mot de passe"}
+                />
+              </Item >
+              <Button rounded style={styles.primaryButton} onPress={this.signup.bind(this)}>
+                <Text>S'inscrire</Text>
+              </Button>
+              <Button rounded style={styles.primaryButton} onPress={this.goToLogin.bind(this)}>
+                <Text>Se connecter</Text>
+              </Button>
+            </Form>
           </Content>
         </Container>
       )
@@ -137,8 +136,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     padding: 10
   },
+  item: {
+    width: '70%',
+    alignSelf: "center"
+  },
+  buttonFirst: {
+    marginTop: 30,
+  },
   primaryButton: {
-    margin: 10,
+    marginVertical: 10,
     padding: 15,
     justifyContent: "center",
     alignSelf: "center",
