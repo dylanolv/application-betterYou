@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { Container, Content, Icon } from 'native-base';
+import { Header, Button, Text, Item, Input, Container, Content, Icon } from 'native-base';
 import DiscoveriesComponent from '../components/DiscoveriesComponent';
 import * as firebase from "firebase";
 
@@ -27,6 +27,7 @@ export default class DiscoveriesScreen extends Component {
         currentUserId: undefined,
         loading: true
       };
+
       this.getDiscoveries();
     }
 
@@ -37,36 +38,6 @@ export default class DiscoveriesScreen extends Component {
     componentWillUnmount() {
       this._isMounted = false;
     }
-
-    // getFavorites() {
-
-    //   if (uid != undefined) {
-    //     firebase.database().ref("favorites/").child(uid).on('value', (snapshot) => {
-    //       if (snapshot != []) {
-    //         let data = snapshot.val();
-    //         let fav = Object(data);
-    //         let tabStarFav = this.state.tabStarSelected;
-    //         tabStarFav = JSON.parse(fav.tabId);
-  
-    //         if (this._isMounted) {
-    //           this.setState({ tabStarSelected: tabStarFav })
-    //         }
-    //       }
-    //       else {
-    //         let favorites = [];
-    //         if (this._isMounted) {
-    //           this.setState({ tabStarSelected: favorites })
-    //         }
-    //       }
-    //     })
-    //   }
-    //   else {
-    //     let favorites = [];
-    //     if (this._isMounted) {
-    //       this.setState({ tabStarSelected: favorites })
-    //     }
-    //   }
-    // }
     
     getDiscoveries() {
       firebase.auth().onAuthStateChanged(user => {
@@ -90,21 +61,31 @@ export default class DiscoveriesScreen extends Component {
       })
     }
 
-    // searchFilterFunction = text => {    
-    //   let tabDiscoveries = this.state.discoveries;
-    //   let newTabDiscoveries = [];
-    //   const textData = text.toUpperCase();
+    searchFilterFunction(text) {
+      let text1 = text.toLowerCase();
+      let newTabDiscoveries = this.state.discoveries
+    
+      const newData = newTabDiscoveries.filter((item) => {
+        let result = item.title.toLowerCase();
+        return result.search(text1) !== -1;
+      });
 
-    //   tabDiscoveries.filter((discovery) => {
-    //     const titleDiscovery = discovery.title.toUpperCase();
-
-    //     if (titleDiscovery == textData) {
-    //       newTabDiscoveries.push(discovery)
-    //       this.setState({ discoveries: newTabDiscoveries });  
-    //     }
-    //   })
-    // };
+      if (!(newData.length > 0) || !(text1.length > 0)) {
+        firebase.database().ref("discoveries/").on('value', (snapshot) => {
+          let data = snapshot.val();
+          let discoveries = Object.values(data);
       
+          if (this._isMounted) {
+            this.setState({ discoveries: discoveries });
+          }
+        });
+      } else {
+        this.setState({
+          discoveries: newData
+        })
+      }
+    }
+    
     goToAccount = () => {
       this.props.navigation.navigate('Account')
     }
@@ -121,15 +102,15 @@ export default class DiscoveriesScreen extends Component {
         return (
           <Container>
             <Content>
-              {/* <Header searchBar>
+              <Header searchBar style={[styles.header]}>
                 <Item>
                   <Icon name="search" />
-                  <Input placeholder="Search" onChangeText={text => this.searchFilterFunction(text)} />
+                  <Input placeholder="Rechercher" onChangeText={text => this.searchFilterFunction(text)} />
                 </Item>
                 <Button transparent>
-                  <Text>Search</Text>
+                  <Text>Rechercher</Text>
                 </Button>
-              </Header> */}
+              </Header>
               <DiscoveriesComponent navigation={this.props.navigation} currentUserId={this.state.currentUserId} discoveries={this.state.discoveries} />
             </Content>
           </Container>
@@ -148,5 +129,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10
+  },
+  header: {
+    backgroundColor: 'transparent'
   }
 });
