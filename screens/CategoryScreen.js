@@ -18,35 +18,44 @@ export default class CategoryScreen extends Component {
   
       this.state = {
         discoveries: [],
+        currentUserId: undefined,
         loading: true
       };
+      this.getDiscoveries();
     }
 
     componentDidMount() {
       this._isMounted = true;
+    }
 
+    getDiscoveries() {
 		  const { navigation } = this.props;
       const category = navigation.getParam('category');
 
-      firebase.database().ref("discoveries/").on('value', (snapshot) => {
-        let childData = [];
-        let i = -1;
-        let categoriesData = [];
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          let uid = user.uid;
+          firebase.database().ref("discoveries/").on('value', (snapshot) => {
+            let childData = [];
+            let i = -1;
+            let categoriesData = [];
 
-        snapshot.forEach(function(childSnapshot) {
-          childData.push(childSnapshot.val());
-          i++;
-          if (childData[i].category == category) {
-            categoriesData.push(childData[i]);
-          }
-        });
-        
-        if (this._isMounted) {
-          this.setState({ discoveries: categoriesData, loading: false});
+            snapshot.forEach(function(childSnapshot) {
+              childData.push(childSnapshot.val());
+              i++;
+              if (childData[i].category == category) {
+                categoriesData.push(childData[i]);
+              }
+            });
+            
+            if (this._isMounted) {
+              this.setState({ currentUserId: uid, discoveries: categoriesData, loading: false});
+            }
+          });
         }
-      });
+      })
     }
-
+    
     componentWillUnmount() {
       this._isMounted = false;
     }
@@ -63,7 +72,7 @@ export default class CategoryScreen extends Component {
         return (
           <Container>
             <Content> 
-              <DiscoveriesComponent navigation={this.props.navigation} discoveries={this.state.discoveries} />
+              <DiscoveriesComponent currentUserId={this.state.currentUserId} navigation={this.props.navigation} discoveries={this.state.discoveries} />
             </Content>
           </Container>
         )

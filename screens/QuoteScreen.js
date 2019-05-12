@@ -58,7 +58,7 @@ export default class QuoteScreen extends Component {
               </Body>
             </CardItem> 
             <CardItem style={{justifyContent: 'center'}}>
-              <Button style={[styles.btnShuffle]} onPress={this.getRandomQuote.bind(this)}>
+              <Button rounded style={[styles.btnShuffle]} onPress={this.getRandomQuote.bind(this)}>
                 <Icon name='shuffle'/>
                 <Text>Citation au hasard</Text>
               </Button>
@@ -112,6 +112,10 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   btnShuffle: {
-    backgroundColor: '#67BBF2'
-  },
+    margin: 10,
+    padding: 15,
+    justifyContent: "center",
+    alignSelf: "center",
+    backgroundColor: "#67BBF2"
+  }
 });

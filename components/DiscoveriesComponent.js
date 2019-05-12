@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Image, StyleSheet, TouchableOpacity, Share } from 'react-native';
 import { Card, CardItem, Text, Button, Icon, Left, Body } from 'native-base';
 import PropTypes from 'prop-types';
-import ReadMore from 'react-native-read-more-text';
 import * as firebase from "firebase";
 
 export default class DiscoveriesComponent extends Component {
@@ -23,20 +22,24 @@ export default class DiscoveriesComponent extends Component {
       currentUserId: PropTypes.string.isRequired
     };
 
-    componentWillMount() {
-      this.load()
-      this.props.navigation.addListener('willFocus', this.load)
-    }
+    // componentWillMount() {
+    //   this.load()
+    //   this.props.navigation.addListener('willFocus', this.load)
+    // }
     
-    load = () => {
-      this.getFavorites();
-    }
+    // load = () => {
+    //   this.getFavorites();
+    //   this.getUpvotes();
+    //   this.getDownvotes();
+    // }
 
     componentDidMount() {
       this._isMounted = true;
       if (this._isMounted) {
         this._interval = setInterval(() => {
           this.getFavorites();
+          this.getUpvotes();
+          this.getDownvotes();
         }, 2000);
       }
     }
@@ -80,8 +83,70 @@ export default class DiscoveriesComponent extends Component {
       }
     }
 
+    getUpvotes() {
+      let uid = this.props.currentUserId;
+
+      if (uid != undefined) {
+        firebase.database().ref("upvotes/").child(uid).on('value', (snapshot) => {
+          if (snapshot != []) {
+            let data = snapshot.val();
+            let up = Object(data);
+            let tabUp = this.state.tabUpBtnSelected;
+            tabUp = JSON.parse(up.tabId);
+  
+            if (this._isMounted) {
+              this.setState({ tabUpBtnSelected: tabUp })
+            }
+          }
+          else {
+            let ups = [];
+            if (this._isMounted) {
+              this.setState({ tabUpBtnSelected: ups })
+            }
+          }
+        })
+      }
+      else {
+        let ups = [];
+        if (this._isMounted) {
+          this.setState({ tabUpBtnSelected: ups })
+        }
+      }
+    }
+
+    getDownvotes() {
+      let uid = this.props.currentUserId;
+
+      if (uid != undefined) {
+        firebase.database().ref("downvotes/").child(uid).on('value', (snapshot) => {
+          if (snapshot != []) {
+            let data = snapshot.val();
+            let down = Object(data);
+            let tabDown = this.state.tabDownBtnSelected;
+            tabDown = JSON.parse(down.tabId);
+  
+            if (this._isMounted) {
+              this.setState({ tabDownBtnSelected: tabDown })
+            }
+          }
+          else {
+            let downs = [];
+            if (this._isMounted) {
+              this.setState({ tabDownBtnSelected: downs })
+            }
+          }
+        })
+      }
+      else {
+        let downs = [];
+        if (this._isMounted) {
+          this.setState({ tabDownBtnSelected: downs })
+        }
+      }
+    }
+
     onPressStar(discoveryId) {
-        let tabStar = this.state.tabStarSelected;    
+        let tabStar = this.state.tabStarSelected;
         let uid = this.props.currentUserId;
 
         if (tabStar.includes(discoveryId)) { 
@@ -105,67 +170,103 @@ export default class DiscoveriesComponent extends Component {
           this.setState({ tabStarSelected: tabStar })
         }
     }
+
+    addUpvoteInDiscovery(up, discoveryId) {
+        firebase.database().ref("discoveries/").once('value', (snapshot) => {
+          let data = snapshot.val();
+          let discoveries = Object.values(data);
+          discoveries.map((item, index) => {
+            if (item.discoveryId == discoveryId) {
+              firebase.database().ref("discoveries/").child(index).update({'upvotes': up })
+            }
+          })
+        });
+    }
+
+    addDownvoteInDiscovery(down, discoveryId) {
+        firebase.database().ref("discoveries/").once('value', (snapshot) => {
+          let data = snapshot.val();
+          let discoveries = Object.values(data);
+          discoveries.map((item, index) => {
+            if (item.discoveryId == discoveryId) {
+              firebase.database().ref("discoveries/").child(index).update({'downvotes': down })
+            }
+          })
+        });
+    }
     
-    onPressUp(index, upvotes, downvotes) {
-      let tabUp = this.state.tabUpBtnSelected;
-      let tabDown = this.state.tabDownBtnSelected;
+    onPressUp(discoveryId, upvotes, downvotes) {
+        let tabUp = this.state.tabUpBtnSelected;
+        let tabDown = this.state.tabDownBtnSelected;
+        let uid = this.props.currentUserId;
       
-        if (tabUp.includes(index)) { 
-          firebase.database().ref("discoveries/").child(index).update({'upvotes': (upvotes-=1) })
-          tabUp.splice( tabUp.indexOf(index), 1 );
+        if (!tabUp.includes(discoveryId)) {
+          let upPlus = upvotes + 1
+          this.addUpvoteInDiscovery(upPlus, discoveryId);
+          tabUp.push(discoveryId); 
+          if (uid != undefined) {
+            tabUpString = JSON.stringify(tabUp)
+            firebase.database().ref("upvotes/").child(uid).update({'tabId': tabUpString })
+          }
         }
         else {
-          firebase.database().ref("discoveries/").child(index).update({'upvotes': (upvotes+=1) })
-          tabUp.push(index); 
+          let upMinus = upvotes - 1
+          this.addUpvoteInDiscovery(upMinus, discoveryId);
+          tabUp.splice( tabUp.indexOf(discoveryId), 1 );
+          if (uid != undefined) {
+            tabUpString = JSON.stringify(tabUp)
+            firebase.database().ref("upvotes/").child(uid).update({'tabId': tabUpString })
+          }
         }
-  
-        if (tabDown.includes(index)) { 
-          firebase.database().ref("discoveries/").child(index).update({'downvotes': (downvotes-=1) })
-          tabDown.splice( tabDown.indexOf(index), 1 );
+        if (tabDown.includes(discoveryId)) { 
+          let downMinus = downvotes - 1
+          this.addDownvoteInDiscovery(downMinus, discoveryId);
+          tabDown.splice( tabDown.indexOf(discoveryId), 1 );
+          if (uid != undefined) {
+            tabDownString = JSON.stringify(tabDown)
+            firebase.database().ref("downvotes/").child(uid).update({'tabId': tabDownString })
+          }
         }
-  
         if (this._isMounted) {
           this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
         }
     }
     
-    onPressDown(index, upvotes, downvotes) {
-      let tabUp = this.state.tabUpBtnSelected;
-      let tabDown = this.state.tabDownBtnSelected;
-
-      if (tabDown.includes(index)) {
-        firebase.database().ref("discoveries/").child(index).update({'downvotes': (downvotes-=1) })
-        tabDown.splice( tabDown.indexOf(index), 1 );
-      }
-      else {
-        firebase.database().ref("discoveries/").child(index).update({'downvotes': (downvotes+=1) })
-        tabDown.push(index); 
-      }
-
-      if (tabUp.includes(index)) { 
-        firebase.database().ref("discoveries/").child(index).update({'upvotes': (upvotes-=1) })
-        tabUp.splice( tabUp.indexOf(index), 1 );
-      }
-
-      if (this._isMounted) {
-        this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
-      }
-    }
-
-    _renderTruncatedFooter = (handlePress) => {
-      return (
-        <TouchableOpacity style={[styles.more]} onPress={handlePress}>
-          <Text style={[styles.moreTxt]}>En savoir plus..</Text>
-        </TouchableOpacity>
-      );
-    }
-  
-    _renderRevealedFooter = (handlePress) => {
-      return (
-        <TouchableOpacity style={[styles.more]} onPress={handlePress}>
-          <Text style={[styles.moreTxt]}>Réduire</Text>
-        </TouchableOpacity>
-      );
+    onPressDown(discoveryId, upvotes, downvotes) {
+        let tabUp = this.state.tabUpBtnSelected;
+        let tabDown = this.state.tabDownBtnSelected;
+        let uid = this.props.currentUserId;
+      
+        if (tabDown.includes(discoveryId)) { 
+          let downMinus = downvotes - 1
+          this.addDownvoteInDiscovery(downMinus, discoveryId);
+          tabDown.splice( tabDown.indexOf(discoveryId), 1 );
+          if (uid != undefined) {
+            tabDownString = JSON.stringify(tabDown)
+            firebase.database().ref("downvotes/").child(uid).update({'tabId': tabDownString })
+          }
+        }
+        else {
+          let downPlus = downvotes + 1
+          this.addDownvoteInDiscovery(downPlus, discoveryId);
+          tabDown.push(discoveryId); 
+          if (uid != undefined) {
+            tabDownString = JSON.stringify(tabDown)
+            firebase.database().ref("downvotes/").child(uid).update({'tabId': tabDownString })
+          }
+        }
+        if (tabUp.includes(discoveryId)) { 
+          let upMinus = upvotes - 1
+          this.addUpvoteInDiscovery(upMinus, discoveryId);
+          tabUp.splice( tabUp.indexOf(discoveryId), 1 );
+          if (uid != undefined) {
+            tabUpString = JSON.stringify(tabUp)
+            firebase.database().ref("upvotes/").child(uid).update({'tabId': tabUpString })
+          }
+        }
+        if (this._isMounted) {
+          this.setState({ tabUpBtnSelected: tabUp, tabDownBtnSelected: tabDown })
+        }
     }
     
     onShare = async (title, content) => {
@@ -184,6 +285,16 @@ export default class DiscoveriesComponent extends Component {
         alert(error.message);
       }
     };
+    
+    goToDiscovery = (discoveryId, category) => {
+      this.props.navigation.navigate('Discovery', {
+        discoveryId: discoveryId,
+        category: category,
+        favorites: this.state.tabStarSelected,
+        btnUp: this.state.tabUpBtnSelected,
+        btnDown: this.state.tabDownBtnSelected
+      })
+    }
     
     render() {
         return (
@@ -206,25 +317,26 @@ export default class DiscoveriesComponent extends Component {
                         </CardItem>
                         <CardItem>
                             <Body>
-                                <ReadMore numberOfLines={3} renderTruncatedFooter={this._renderTruncatedFooter} renderRevealedFooter={this._renderRevealedFooter} >
-                                  <Text style={[styles.txt]}>
-                                    {discovery.content}
-                                  </Text>
-                                </ReadMore>
+                                <Text style={[styles.txt]} button onPress={()=>this.goToDiscovery(discovery.discoveryId, discovery.category)}>
+                                    {discovery.content1}
+                                </Text>
+                                <TouchableOpacity style={[styles.more]} onPress={()=>this.goToDiscovery(discovery.discoveryId, discovery.category)}>
+                                    <Text style={[styles.moreTxt]}>En savoir plus..</Text>
+                                </TouchableOpacity>
                             </Body>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>
-                            <Button style={[(this.state.tabUpBtnSelected && this.state.tabUpBtnSelected.includes(index))?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressUp(index, discovery.upvotes, discovery.downvotes)}>
-                                <Icon style={(this.state.tabUpBtnSelected && this.state.tabUpBtnSelected.includes(index))?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-up'/>
-                                <Text style={(this.state.tabUpBtnSelected && this.state.tabUpBtnSelected.includes(index))?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.upvotes}</Text>
+                            <Button rounded style={[(this.state.tabUpBtnSelected && this.state.tabUpBtnSelected.includes(discovery.discoveryId))?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressUp(discovery.discoveryId, discovery.upvotes, discovery.downvotes)}>
+                                <Icon style={(this.state.tabUpBtnSelected && this.state.tabUpBtnSelected.includes(discovery.discoveryId))?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-up'/>
+                                <Text style={(this.state.tabUpBtnSelected && this.state.tabUpBtnSelected.includes(discovery.discoveryId))?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.upvotes}</Text>
                             </Button>
-                            <Button style={[(this.state.tabDownBtnSelected && this.state.tabDownBtnSelected.includes(index))?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressDown(index, discovery.upvotes, discovery.downvotes)}>
-                                <Icon style={(this.state.tabDownBtnSelected && this.state.tabDownBtnSelected.includes(index))?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-down'/>
-                                <Text style={(this.state.tabDownBtnSelected && this.state.tabDownBtnSelected.includes(index))?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.downvotes}</Text>
+                            <Button rounded style={[(this.state.tabDownBtnSelected && this.state.tabDownBtnSelected.includes(discovery.discoveryId))?styles.btnSelected:styles.btnNotSelected, styles.marginUpDownButtons]} onPress={()=>this.onPressDown(discovery.discoveryId, discovery.upvotes, discovery.downvotes)}>
+                                <Icon style={(this.state.tabDownBtnSelected && this.state.tabDownBtnSelected.includes(discovery.discoveryId))?styles.iconBtnSelected:styles.iconBtnNotSelected} name='trending-down'/>
+                                <Text style={(this.state.tabDownBtnSelected && this.state.tabDownBtnSelected.includes(discovery.discoveryId))?styles.txtBtnSelected:styles.txtBtnNotSelected}>{discovery.downvotes}</Text>
                             </Button>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>
-                            <Button style={[styles.btnShareComment]} onPress={()=>this.onShare(discovery.title, discovery.content)}>
+                            <Button rounded style={[styles.btnShareComment]} onPress={()=>this.onShare(discovery.title, discovery.content)}>
                                 <Icon name='share' style={[styles.iconBtnSelected]}/>
                                 <Text style={[styles.txtBtnSelected]}>Partager</Text>
                             </Button>
@@ -283,8 +395,7 @@ const styles = StyleSheet.create({
       height: '84%',
       width: '35%',
       justifyContent: 'center',
-      elevation: 0,
-      borderRadius:15
+      elevation: 0
     },
     btnNotSelected: {
       backgroundColor: 'transparent',
@@ -293,8 +404,7 @@ const styles = StyleSheet.create({
       height: '84%',
       width: '35%',
       justifyContent: 'center',
-      elevation: 0,
-      borderRadius:15
+      elevation: 0
     },
     btnShareComment: {
       backgroundColor: '#67BBF2',
@@ -302,8 +412,7 @@ const styles = StyleSheet.create({
       borderColor: '#67BBF2',
       height: '84%',
       width: '50%',
-      justifyContent: 'center',
-      borderRadius:15
+      justifyContent: 'center'
     },
     iconBtnSelected: {
       fontSize: 35,

@@ -7,7 +7,7 @@ import * as firebase from "firebase";
 export default class DiscoveryScreen extends Component {
     static navigationOptions = ({ navigation }) => {
       return {
-        title: navigation.getParam('title')
+        title: navigation.getParam('category')
       };
     };
 
@@ -19,7 +19,11 @@ export default class DiscoveryScreen extends Component {
       this.state = {
         discovery: [],
         isFavorite: false,
+        isUp: false,
+        isDown: false,
         favorites: [],
+        btnUp: [],
+        btnDown: [],
         loading: true
       };
     }
@@ -35,25 +39,49 @@ export default class DiscoveryScreen extends Component {
 
     getDiscovery() {
 		  const { navigation } = this.props;
-      const index = navigation.getParam('index');
+      const indexDiscovery = navigation.getParam('discoveryId');
       const favorites = navigation.getParam('favorites');
+      const btnUp = navigation.getParam('btnUp');
+      const btnDown = navigation.getParam('btnDown');
 
       firebase.database().ref("discoveries/").on('value', (snapshot) => {
         let data = snapshot.val();
         let fav = this.state.isFavorite;
+        let up = this.state.isUp;
+        let down = this.state.isDown;
         let discoveries = Object.values(data);
+        
         let discovery = []
-        discovery.push(discoveries[index]);
 
-        if (!favorites.includes(index)) {
+        discoveries.map((item, i) => {
+          if (item.discoveryId == indexDiscovery) {
+            discovery.push(item);
+          }
+        })
+        
+        if (!favorites.includes(indexDiscovery)) {
           fav = false;
         }
         else {
           fav = true
         }
+        
+        if (!btnUp.includes(indexDiscovery)) {
+          up = false;
+        }
+        else {
+          up = true
+        }
+        
+        if (!btnDown.includes(indexDiscovery)) {
+          down = false;
+        }
+        else {
+          down = true
+        }
 
         if (this._isMounted) {
-          this.setState({ discovery: discovery, isFavorite: fav, favorites: favorites, loading: false });
+          this.setState({ discovery: discovery, isFavorite: fav, isUp: up, isDown: down, favorites: favorites, btnUp: btnUp, btnDown: btnDown, loading: false });
         }
       });
     }
@@ -70,7 +98,7 @@ export default class DiscoveryScreen extends Component {
         return (
           <Container>
             <Content> 
-              <DiscoveryComponent favorites={this.state.favorites} isFavorite={this.state.isFavorite} discovery={this.state.discovery} />
+              <DiscoveryComponent favorites={this.state.favorites} isFavorite={this.state.isFavorite} btnUp={this.state.btnUp} isUp={this.state.isUp} btnDown={this.state.btnDown} isDown={this.state.isDown} discovery={this.state.discovery} />
             </Content>
           </Container>
         )

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Container, Content, Icon, Header, Item, Input, Button, Text } from 'native-base';
-import FavoritesComponent from '../components/FavoritesComponent';
+import DiscoveriesComponent from '../components/DiscoveriesComponent';
 import * as firebase from "firebase";
 
 export default class FavoritesScreen extends Component {
@@ -22,22 +22,34 @@ export default class FavoritesScreen extends Component {
         currentUserId: undefined,
         loading: true
       };
+
+      this.getFavorites();
     }
 
-    componentWillMount() {
-        this.load()
-        this.props.navigation.addListener('willFocus', this.load)
-    }
+    // componentWillMount() {
+    //     this.load()
+    //     this.props.navigation.addListener('willFocus', this.load)
+    // }
     
-    load = () => {
-        this.getFavorites();
-    }
+    // load = () => {
+    //     this.getFavorites();
+    // }
 
     componentDidMount() {
         this._isMounted = true;
+        if (this._isMounted) {
+          this._interval = setInterval(() => {
+            this.getFavorites();
+          }, 2000);
+        }
+    }
 
-        this.getUserId();
-        setTimeout(() => {this.getFavorites();}, 500)
+    componentWillUnmount() {
+        this._isMounted = false;
+      
+        if (this._isMounted == false) {
+          clearInterval(this._interval);
+        }
     }
 
     getUserId() {
@@ -55,21 +67,18 @@ export default class FavoritesScreen extends Component {
         })
     }
 
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
-
     getFavorites() {
-        let uid = this.state.currentUserId;
   
-        if (uid != undefined) {
+        firebase.auth().onAuthStateChanged(user => {
+          if (user) {
+            let uid = user.uid;
             firebase.database().ref("favorites/").child(uid).on('value', (snapshot) => {
                 let data = snapshot.val();
                 let fav = Object(data);
                 let tabStarFav = this.state.tabStarSelected;
                 tabStarFav = JSON.parse(fav.tabId);
                 if (this._isMounted) {
-                    this.setState({ tabUserFavorites: tabStarFav })
+                    this.setState({ currentUserId: uid, tabUserFavorites: tabStarFav })
                 }
             })
 
@@ -79,21 +88,24 @@ export default class FavoritesScreen extends Component {
                 let fav = []
                 let tabUserFav = this.state.tabUserFavorites;
 
-                tabUserFav.map((item) => {
-                    fav.push(favorites[item]);
+                favorites.map((item) => {
+                  if (tabUserFav.includes(item.discoveryId)) {
+                    fav.push(item);
+                  }
                 })
 
                 if (this._isMounted) {
-                    this.setState({favorites: fav, loading: false });
+                    this.setState({ favorites: fav, loading: false });
                 }
             });
-        }
-        else {
-          let favorites = [];
-          if (this._isMounted) {
-            this.setState({ tabUserFavorites: favorites })
           }
-        }
+          else {
+            let favorites = [];
+            if (this._isMounted) {
+              this.setState({ tabUserFavorites: favorites })
+            }
+          }
+        })
     }
 
     render() {   
@@ -108,7 +120,7 @@ export default class FavoritesScreen extends Component {
         return (
           <Container>
             <Content>
-              <FavoritesComponent favorites={this.state.favorites} />
+              <DiscoveriesComponent navigation={this.props.navigation} currentUserId={this.state.currentUserId} discoveries={this.state.favorites} />
             </Content>
           </Container>
         )

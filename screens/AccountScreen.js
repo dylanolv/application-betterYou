@@ -53,15 +53,19 @@ export default class AccountScreen extends React.Component {
       <Container style={[styles.container, styles.horizontal]}>
       <Content padder>
         <Card>
-          <CardItem bordered>
+          <CardItem>
             <Body>
               <Text style={[styles.title]}>Vos informations</Text>
-              <Text style={[styles.user]}>{this.state.displayName}</Text>
-              <Text style={[styles.email]}>{this.state.email}</Text>
+              <Text>Nom d'utilisateur</Text><Text style={[styles.user]}>{this.state.displayName}</Text>
+              <Text>Adresse e-mail</Text><Text style={[styles.user]}>{this.state.email}</Text>
             </Body>
-            <Button rounded style={styles.primaryButton} onPress={this.logout.bind(this)}>
-              <Text>Se déconnecter</Text>
-            </Button>
+          </CardItem>
+          <CardItem>
+            <Body>
+              <Button rounded style={styles.primaryButton} onPress={this.logout.bind(this)}>
+                <Text>Se déconnecter</Text>
+              </Button>
+            </Body>
           </CardItem>
         </Card>
       </Content>
@@ -81,22 +85,25 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     padding: 10
   },
-  author: {
-    fontSize: 16,
+  title: {
+    fontSize: 22,
     fontWeight: 'bold',
     alignSelf: 'center',
     marginBottom: 10
   },
-  content: {
+  user: {
+    fontWeight: 'bold',
     fontSize: 16,
-    alignSelf: 'center',
-    textAlign: 'center'
+    marginBottom: 10
+  },
+  email: {
+    fontWeight: 'bold',
+    fontSize: 16
   },
   primaryButton: {
     margin: 10,
     padding: 15,
-    justifyContent: "center",
-    alignSelf: "center",
+    alignSelf: 'center',
     backgroundColor: "#67BBF2"
   }
 });
