@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, Share } from 'react-native';
 import { Card, CardItem, Text, Button, Icon, Left, Body } from 'native-base';
 import PropTypes from 'prop-types';
 import * as firebase from "firebase";
@@ -183,6 +183,23 @@ export default class DiscoveryComponent extends Component {
         }
     }
     
+    onShare = async (title, content) => {
+      try {
+        const result = await Share.share({
+          title : title,
+          message: content
+        });
+        if (result.action === Share.sharedAction) {
+          if (result.activityType) {}
+          else {}
+        } 
+        else if (result.action === Share.dismissedAction) {}
+      } 
+      catch (error) {
+        alert(error.message);
+      }
+    };
+    
     render() {
         return (
             this.props.discovery.map((item, index) => {
@@ -219,7 +236,7 @@ export default class DiscoveryComponent extends Component {
                             </Button>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>
-                            <Button rounded style={[styles.btnShareComment, styles.marginShareCommentButtons]}>
+                            <Button rounded style={[styles.btnShareComment]} onPress={()=>this.onShare(item.title, item.content1)}>
                                 <Icon name='share' style={[styles.iconBtnSelected]}/>
                                 <Text style={[styles.txtBtnSelected]}>Partager</Text>
                             </Button>

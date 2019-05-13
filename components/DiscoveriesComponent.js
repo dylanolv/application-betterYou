@@ -313,7 +313,9 @@ export default class DiscoveriesComponent extends Component {
                             </TouchableOpacity>
                         </CardItem>
                         <CardItem>
-                          <Image source={{ uri: discovery.image }} style={[styles.img]}/>
+                          <TouchableOpacity onPress={()=>this.goToDiscovery(discovery.discoveryId, discovery.category)}>
+                            <Image source={{ uri: discovery.image }} style={[styles.img]}/>
+                          </TouchableOpacity>
                         </CardItem>
                         <CardItem>
                             <Body>
@@ -336,7 +338,7 @@ export default class DiscoveriesComponent extends Component {
                             </Button>
                         </CardItem>
                         <CardItem style={{justifyContent: 'center'}}>
-                            <Button rounded style={[styles.btnShareComment]} onPress={()=>this.onShare(discovery.title, discovery.content)}>
+                            <Button rounded style={[styles.btnShareComment]} onPress={()=>this.onShare(discovery.title, discovery.content1)}>
                                 <Icon name='share' style={[styles.iconBtnSelected]}/>
                                 <Text style={[styles.txtBtnSelected]}>Partager</Text>
                             </Button>
