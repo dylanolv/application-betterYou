@@ -14,6 +14,11 @@ export default class DiscoveriesScreen extends Component {
             <Icon name='person' style={{fontSize: 40, color: '#67BBF2', paddingRight: 20}}/>
           </TouchableOpacity>
         ),
+        headerLeft: (
+          <TouchableOpacity onPress={() => params.handleSearchDisplay()}>
+            <Icon name='search' style={{fontSize: 40, color: '#67BBF2', paddingLeft: 20}}/>
+          </TouchableOpacity>
+        )
       };
     };
 
@@ -25,6 +30,7 @@ export default class DiscoveriesScreen extends Component {
       this.state = {
         discoveries: [],
         currentUserId: undefined,
+        displaySearchBar: false,
         loading: true
       };
 
@@ -44,6 +50,8 @@ export default class DiscoveriesScreen extends Component {
         if (user) {
           let uid = user.uid;
           this.props.navigation.setParams({ handleNavigation: this.goToAccount })
+          this.props.navigation.setParams({ handleSearchDisplay: this.displaySearch })
+
           firebase.database().ref("discoveries/").on('value', (snapshot) => {
             let data = snapshot.val();
             let discoveries = Object.values(data);
@@ -80,14 +88,24 @@ export default class DiscoveriesScreen extends Component {
           }
         });
       } else {
-        this.setState({
-          discoveries: newData
-        })
+        if (this._isMounted) {
+          this.setState({
+            discoveries: newData
+          })
+        }
       }
     }
     
     goToAccount = () => {
       this.props.navigation.navigate('Account')
+    }
+    
+    displaySearch = () => {
+      valueDisplay = !this.state.displaySearchBar;
+
+      if (this._isMounted) {
+        this.setState({ displaySearchBar: valueDisplay });
+      }
     }
   
     render() {   
@@ -102,7 +120,7 @@ export default class DiscoveriesScreen extends Component {
         return (
           <Container>
             <Content>
-              <Header searchBar style={[styles.header]}>
+              <Header searchBar style={[(!this.state.displaySearchBar)?styles.hidden:'', styles.header]}>
                 <Item>
                   <Icon name="search" />
                   <Input placeholder="Rechercher" onChangeText={text => this.searchFilterFunction(text)} />
@@ -131,6 +149,15 @@ const styles = StyleSheet.create({
     padding: 10
   },
   header: {
-    backgroundColor: 'transparent'
-  }
+    backgroundColor: 'transparent',
+    marginTop: 7,
+    width: '85%',
+    alignSelf: 'center'
+  },
+  hidden: {
+    display: 'none'
+  },
+  notHidden: {
+
+  },
 });

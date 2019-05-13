@@ -299,7 +299,8 @@ const styles = StyleSheet.create({
       height: '84%',
       width: '35%',
       justifyContent: 'center',
-      elevation: 0
+      elevation: 0,
+      textAlign: 'center'
     },
     btnNotSelected: {
       backgroundColor: 'transparent',
@@ -308,7 +309,8 @@ const styles = StyleSheet.create({
       height: '84%',
       width: '35%',
       justifyContent: 'center',
-      elevation: 0
+      elevation: 0,
+      textAlign: 'center'
     },
     btnShareComment: {
       backgroundColor: '#67BBF2',
@@ -316,7 +318,8 @@ const styles = StyleSheet.create({
       borderColor: '#67BBF2',
       height: '84%',
       width: '50%',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      textAlign: 'center'
     },
     iconBtnSelected: {
       fontSize: 35,
