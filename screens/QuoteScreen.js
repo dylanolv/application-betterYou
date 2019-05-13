@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
   iconQuote: {
     fontSize: 60,
-    color: '#008ba3',
+    color: '#67BBF2',
     padding: 20
   },
   iconQuote1: {
@@ -116,6 +116,6 @@ const styles = StyleSheet.create({
     padding: 15,
     justifyContent: "center",
     alignSelf: "center",
-    backgroundColor: "#67BBF2"
+    backgroundColor: "#288bbf"
   }
 });

@@ -411,9 +411,9 @@ const styles = StyleSheet.create({
       textAlign: 'center'
     },
     btnShareComment: {
-      backgroundColor: '#67BBF2',
+      backgroundColor: '#288bbf',
       borderWidth: 1,
-      borderColor: '#67BBF2',
+      borderColor: '#288bbf',
       height: '84%',
       width: '50%',
       justifyContent: 'center',

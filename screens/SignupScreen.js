@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     padding: 15,
     justifyContent: "center",
     alignSelf: "center",
-    backgroundColor: "#67BBF2",
+    backgroundColor: "#288bbf",
     width: 170
   }
 });

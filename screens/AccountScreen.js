@@ -104,6 +104,6 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 15,
     alignSelf: 'center',
-    backgroundColor: "#67BBF2"
+    backgroundColor: "#288bbf"
   }
 });

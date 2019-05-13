@@ -264,7 +264,8 @@ const styles = StyleSheet.create({
     },
     title: {
       fontWeight: 'bold',
-      width:'80%'
+      width:'80%',
+      fontSize: 20
     },
     more: {
       alignSelf: 'flex-end'
@@ -313,9 +314,9 @@ const styles = StyleSheet.create({
       textAlign: 'center'
     },
     btnShareComment: {
-      backgroundColor: '#67BBF2',
+      backgroundColor: '#288bbf',
       borderWidth: 1,
-      borderColor: '#67BBF2',
+      borderColor: '#288bbf',
       height: '84%',
       width: '50%',
       justifyContent: 'center',

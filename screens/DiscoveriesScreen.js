@@ -11,12 +11,12 @@ export default class DiscoveriesScreen extends Component {
         headerTitle: 'Better You',
         headerRight: (
           <TouchableOpacity onPress={() => params.handleNavigation()}>
-            <Icon name='person' style={{fontSize: 40, color: '#67BBF2', paddingRight: 20}}/>
+            <Icon name='person' style={{fontSize: 35, color: '#288bbf', paddingRight: 20}}/>
           </TouchableOpacity>
         ),
         headerLeft: (
           <TouchableOpacity onPress={() => params.handleSearchDisplay()}>
-            <Icon name='search' style={{fontSize: 40, color: '#67BBF2', paddingLeft: 20}}/>
+            <Icon name='search' style={{fontSize: 35, color: '#288bbf', paddingLeft: 20}}/>
           </TouchableOpacity>
         )
       };
@@ -123,11 +123,11 @@ export default class DiscoveriesScreen extends Component {
               <Header searchBar style={[(!this.state.displaySearchBar)?styles.hidden:'', styles.header]}>
                 <Item>
                   <Icon name="search" />
-                  <Input placeholder="Rechercher" onChangeText={text => this.searchFilterFunction(text)} />
+                  <Input style={[styles.inputHeader]} placeholder="Rechercher" onChangeText={text => this.searchFilterFunction(text)} />
                 </Item>
-                <Button transparent>
+                {/* <Button transparent>
                   <Text>Rechercher</Text>
-                </Button>
+                </Button> */}
               </Header>
               <DiscoveriesComponent navigation={this.props.navigation} currentUserId={this.state.currentUserId} discoveries={this.state.discoveries} />
             </Content>
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   hidden: {
     display: 'none'
   },
-  notHidden: {
-
-  },
+  inputHeader: {
+    borderRadius: 25
+  }
 });

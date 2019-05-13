@@ -95,7 +95,7 @@ export default class LoginScreen extends Component {
             <Container style={[styles.container, styles.horizontal]}>
               <Content>
                 <Form>
-                  <Item  style={[styles.item]}>
+                  <Item style={[styles.item]}>
                     <Icon name="mail" style={{ color: "#67BBF2" }} />
                     <Input
                       autoCapitalize = 'none'
@@ -104,7 +104,7 @@ export default class LoginScreen extends Component {
                       placeholder={"E-mail"}
                     />
                   </Item >
-                  <Item  style={[styles.item]}>
+                  <Item style={[styles.item]}>
                     <Icon name="unlock" style={{ color: "#67BBF2" }} />
                     <Input
                       onChangeText={text => this.setState({ password: text })}
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     padding: 15,
     justifyContent: "center",
     alignSelf: "center",
-    backgroundColor: "#67BBF2",
+    backgroundColor: "#288bbf",
     width: 170
   }
 });
