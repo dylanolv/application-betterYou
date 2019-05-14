@@ -11,6 +11,7 @@ export default class CategoryScreen extends Component {
       };
     };
 
+    // Utilisation de isMounted pour éviter l'erreur "Can't call setState (or forceUpdate) on an unmounted component"
     _isMounted = false;
   
     constructor(props) {
@@ -25,6 +26,7 @@ export default class CategoryScreen extends Component {
     }
 
     componentDidMount() {
+      // isMounted à true pour notifier que le component est monté
       this._isMounted = true;
     }
 
@@ -32,6 +34,7 @@ export default class CategoryScreen extends Component {
 		  const { navigation } = this.props;
       const category = navigation.getParam('category');
 
+      // On récupère les découvertes de la catégories sur laquelle on a cliqué pour les mettre dans le composant DiscoveriesComponent
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
           let uid = user.uid;
@@ -43,6 +46,7 @@ export default class CategoryScreen extends Component {
             snapshot.forEach(function(childSnapshot) {
               childData.push(childSnapshot.val());
               i++;
+              // Si la catégorie est égale à la catégorie reçue en param on la met dans le tableau
               if (childData[i].category == category) {
                 categoriesData.push(childData[i]);
               }
@@ -57,6 +61,7 @@ export default class CategoryScreen extends Component {
     }
     
     componentWillUnmount() {
+      // isMounted à false pour notifier que le component est démonté
       this._isMounted = false;
     }
     

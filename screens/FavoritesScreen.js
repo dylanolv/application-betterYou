@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { Container, Content, Icon, Header, Item, Input, Button, Text } from 'native-base';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { Container, Content } from 'native-base';
 import DiscoveriesComponent from '../components/DiscoveriesComponent';
 import * as firebase from "firebase";
 
@@ -11,6 +11,7 @@ export default class FavoritesScreen extends Component {
       };
     };
 
+    // Utilisation de isMounted pour éviter l'erreur "Can't call setState (or forceUpdate) on an unmounted component"
     _isMounted = false;
   
     constructor(props) {
@@ -26,17 +27,13 @@ export default class FavoritesScreen extends Component {
       this.getFavorites();
     }
 
-    // componentWillMount() {
-    //     this.load()
-    //     this.props.navigation.addListener('willFocus', this.load)
-    // }
-    
-    // load = () => {
-    //     this.getFavorites();
-    // }
-
     componentDidMount() {
+      // isMounted à true pour notifier que le component est monté
         this._isMounted = true;
+
+        this.getUserId();
+        
+      // Si le composant est monté on exécute les fonctions suivantes toutes les deux secondes
         if (this._isMounted) {
           this._interval = setInterval(() => {
             this.getFavorites();
@@ -45,13 +42,16 @@ export default class FavoritesScreen extends Component {
     }
 
     componentWillUnmount() {
+        // isMounted à false pour notifier que le component est démonté
         this._isMounted = false;
       
+        // Quand le composant est démonté on supprime tous les interval
         if (this._isMounted == false) {
           clearInterval(this._interval);
         }
     }
 
+    // Fonction qui récupère le userid
     getUserId() {
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
@@ -67,8 +67,8 @@ export default class FavoritesScreen extends Component {
         })
     }
 
+    // Fonction qui récupère les favoris du user pour les mette ensuite dans DiscoveriesComponent 
     getFavorites() {
-  
         firebase.auth().onAuthStateChanged(user => {
           if (user) {
             let uid = user.uid;

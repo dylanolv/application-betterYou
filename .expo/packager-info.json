@@ -1,10 +1,10 @@
 {
   "expoServerPort": 19000,
   "webpackServerPort": null,
-  "expoServerNgrokUrl": "https://pw-g22.anonymous.application-betteryou.exp.direct",
-  "packagerNgrokUrl": "https://packager.pw-g22.anonymous.application-betteryou.exp.direct",
-  "ngrokPid": 15332,
+  "expoServerNgrokUrl": "https://pw-g22.dylanolb.application-betteryou.exp.direct",
+  "packagerNgrokUrl": "https://packager.pw-g22.dylanolb.application-betteryou.exp.direct",
+  "ngrokPid": 1080,
   "devToolsPort": 19002,
   "packagerPort": 19001,
-  "packagerPid": 11944
+  "packagerPid": 8016
 }

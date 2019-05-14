@@ -1,4 +1,5 @@
 export default {
+  // Connexion à firebase
   FirebaseConfig: {
     apiKey: "AIzaSyC5eEj4GDdNByeljnixIhkfE2iKKfQBEeI",
     authDomain: "betteryou-5e5bb.firebaseapp.com",

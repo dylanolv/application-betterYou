@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { Container, Content, List } from 'native-base';
 import CategoriesComponent from '../components/CategoriesComponent';
 import * as firebase from "firebase";
@@ -11,6 +11,7 @@ export default class CategoriesScreen extends Component {
       };
     };
 
+    // Utilisation de isMounted pour éviter l'erreur "Can't call setState (or forceUpdate) on an unmounted component"
     _isMounted = false;
   
     constructor(props) {
@@ -23,20 +24,24 @@ export default class CategoriesScreen extends Component {
     }
 
     componentDidMount() {
+      // isMounted à true pour notifier que le component est monté
       this._isMounted = true;
 
+      // On récupère les discoveries de firebase ordonnée par la catégorie
       firebase.database().ref("discoveries/").orderByChild('category').on('value', (snapshot) => {
         let childData = [];
         let i = -1;
         let categoriesData = [];
         let categorieDataFiltered = [];
 
+        // On parcours avec un foreach pour ne pas perdre l'ordre alphabétique
         snapshot.forEach(function(childSnapshot) {
           childData.push(childSnapshot.val());
           i++;
           categoriesData.push(childData[i].category);
         });
         
+        // On filtre pour ne pas garder les catégories apparraissant deux fois en double dans la liste des catégories montrées à l'utilisateur
         categorieDataFiltered = categoriesData.filter(function(item, index){
           return categoriesData.indexOf(item) >= index;
         });
@@ -48,6 +53,7 @@ export default class CategoriesScreen extends Component {
     }
 
     componentWillUnmount() {
+      // isMounted à false pour notifier que le component est démonté
       this._isMounted = false;
     }
     

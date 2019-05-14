@@ -13,6 +13,7 @@ export default class QuoteScreen extends Component {
     this.state = { loading: true, items: [] };
   }
 
+  // Fonction qui récupère les citation firebase database puis en renvoie une à la fois au hasard
   getRandomQuote() {
     firebase
       .database()

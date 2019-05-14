@@ -1,6 +1,6 @@
 import React from "react";
-import { View, StyleSheet, ActivityIndicator, AsyncStorage } from "react-native";
-import { Container, Content, Card, CardItem, Text, Icon, Body, Button } from 'native-base';
+import { StyleSheet } from "react-native";
+import { Container, Content, Card, CardItem, Text, Body, Button } from 'native-base';
 import * as firebase from "firebase";
 
 export default class AccountScreen extends React.Component {
@@ -8,6 +8,7 @@ export default class AccountScreen extends React.Component {
     title: "Compte"
   };
 
+  // Utilisation de isMounted pour éviter l'erreur "Can't call setState (or forceUpdate) on an unmounted component"
   _isMounted = false;
 
   constructor(props) {
@@ -20,13 +21,16 @@ export default class AccountScreen extends React.Component {
   }
 
   componentDidMount() {
+    // isMounted à true pour notifier que le component est monté
     this._isMounted = true;
   }
 
   componentWillUnmount() {
+    // isMounted à false pour notifier que le component est démonté
     this._isMounted = false;
   }
 
+  // On récupère les infos du user connecté sur firebase
   getUserData() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -40,12 +44,11 @@ export default class AccountScreen extends React.Component {
     })
   }
 
+  // Au clique sur le bouton se déconnecter on se logout de firebase et on revnvoie à l'authentification
   logout() {
-    AsyncStorage.removeItem('userData').then(() => {
-      firebase.auth().signOut().then(() => {
-        this.props.navigation.navigate("AuthStack");
-      });  
-    });
+    firebase.auth().signOut().then(() => {
+      this.props.navigation.navigate("AuthStack");
+    });  
   }
 
   render() {

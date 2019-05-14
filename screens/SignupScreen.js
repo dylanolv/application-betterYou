@@ -25,6 +25,7 @@ export default class SignupScreen extends Component {
 
     this.setState({ loading: true });
 
+    // Fonction firebase qui crée un user, suivi du login pour resté connecté après s'être inscrit
     firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => {
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
@@ -51,7 +52,9 @@ export default class SignupScreen extends Component {
           );
         }
       });
-
+    
+    // Lorsque l'on s'inscrit on ajout le username dans le user sur firebase et l'on crée l'endroit 
+    // ou l'on stockera les favoris, upvotes et downvotes du user dans firebase database
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         user.updateProfile({ displayName: username })

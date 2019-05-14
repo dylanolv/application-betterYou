@@ -23,6 +23,7 @@ export default class LoginScreen extends Component {
         loading: true
       });
 
+      // Fonction firebase qui signin le user
       firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
         .then(userData => {
           this.props.navigation.navigate("AuthLoading");
@@ -49,31 +50,31 @@ export default class LoginScreen extends Component {
     // }
 
     // getUserInAsynStorage = async () => {
-    //   // try {
-    //   //   const userData = await AsyncStorage.getItem('userData');
-    //   //   if (userData !== null) {
-    //   //     let user = JSON.parse(userData)
+    //   try {
+    //     const userData = await AsyncStorage.getItem('userData');
+    //     if (userData !== null) {
+    //       let user = JSON.parse(userData)
 
-    //   //     Object.keys(user).map(function(key) {
-    //   //       console.log(user.user.uid)
-    //   //     });
-    //   //   }
-    //   //   // AsyncStorage.clear()
-    //   //   // AsyncStorage.getAllKeys().then(async (keys) => {
-    //   //   //   AsyncStorage.multiGet(keys).then(async (result) => {
-    //   //   //     console.log('result :', result);
-    //   //   //   })
-    //   //   // })
-    //   // } catch (error) {
-    //   //   console.log(error);
-    //   // }
+    //       Object.keys(user).map(function(key) {
+    //         console.log(user.user.uid)
+    //       });
+    //     }
+    //     // AsyncStorage.clear()
+    //     // AsyncStorage.getAllKeys().then(async (keys) => {
+    //     //   AsyncStorage.multiGet(keys).then(async (result) => {
+    //     //     console.log('result :', result);
+    //     //   })
+    //     // })
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
 
-    //   // firebase.auth().onAuthStateChanged((user) => {
-    //   //   if (user) {
-    //   //     var uid = user.uid;
-    //   //     console.log(uid)
-    //   //   }
-    //   // });
+    //   firebase.auth().onAuthStateChanged((user) => {
+    //     if (user) {
+    //       var uid = user.uid;
+    //       console.log(uid)
+    //     }
+    //   });
     // };
   
     goToSignup() {

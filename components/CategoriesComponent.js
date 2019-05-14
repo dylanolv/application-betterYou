@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { ListItem, Text, Left, Right, Icon } from 'native-base';
 import PropTypes from 'prop-types';
 
@@ -11,6 +11,7 @@ export default class CategoriesComponent extends Component {
     }
 
     static propTypes = {
+        // Récupère via les props le tableau catégories de CategoriesScreen
         categories: PropTypes.array.isRequired
     };
     
@@ -22,6 +23,7 @@ export default class CategoriesComponent extends Component {
     
     render() {
         return (
+            // Map sur le tableau de catégories pour en afficher le contenu dans une liste
             this.props.categories.map((category, index) => {
                 return (
                     <ListItem key={index} button={true} onPress={()=>this.goToCategory(category)}>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import TabBarIcon from '../components/TabBarIcon';
 import DiscoveriesScreen from '../screens/DiscoveriesScreen';
@@ -32,7 +31,7 @@ const CategoriesStack = createStackNavigator({
 });
 
 CategoriesStack.navigationOptions = {
-  tabBarLabel: 'Categories',
+  tabBarLabel: 'Catégories',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}

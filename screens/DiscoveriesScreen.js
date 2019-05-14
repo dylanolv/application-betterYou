@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { Header, Button, Text, Item, Input, Container, Content, Icon } from 'native-base';
+import { Header, Item, Input, Container, Content, Icon } from 'native-base';
 import DiscoveriesComponent from '../components/DiscoveriesComponent';
 import * as firebase from "firebase";
 
@@ -22,6 +22,7 @@ export default class DiscoveriesScreen extends Component {
       };
     };
 
+    // Utilisation de isMounted pour éviter l'erreur "Can't call setState (or forceUpdate) on an unmounted component"
     _isMounted = false;
   
     constructor(props) {
@@ -38,17 +39,22 @@ export default class DiscoveriesScreen extends Component {
     }
 
     componentDidMount() {
+      // isMounted à true pour notifier que le component est monté
       this._isMounted = true;
     }
 
     componentWillUnmount() {
+      // isMounted à false pour notifier que le component est démonté
       this._isMounted = false;
     }
     
+    // Focntion qui récupère toutes les découvertes pour les donner au composant DiscoveriesComponent
     getDiscoveries() {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
           let uid = user.uid;
+          
+          // Afin de pouvoir executer une fonction depuis le header il faut la passser en param dans navigation
           this.props.navigation.setParams({ handleNavigation: this.goToAccount })
           this.props.navigation.setParams({ handleSearchDisplay: this.displaySearch })
 
@@ -69,6 +75,7 @@ export default class DiscoveriesScreen extends Component {
       })
     }
 
+    // Fonction de recherche parmis les découvertes
     searchFilterFunction(text) {
       let text1 = text.toLowerCase();
       let newTabDiscoveries = this.state.discoveries
@@ -78,6 +85,7 @@ export default class DiscoveriesScreen extends Component {
         return result.search(text1) !== -1;
       });
 
+      // Si il n'y a pas de correspondance on remet les découvertes dans le tableau
       if (!(newData.length > 0) || !(text1.length > 0)) {
         firebase.database().ref("discoveries/").on('value', (snapshot) => {
           let data = snapshot.val();
@@ -96,10 +104,12 @@ export default class DiscoveriesScreen extends Component {
       }
     }
     
+    // Fonction qui envoie au screen account
     goToAccount = () => {
       this.props.navigation.navigate('Account')
     }
     
+    // Fonction qui affiche ou non la barre de recherche en jouant sur le state displaySearchBar
     displaySearch = () => {
       valueDisplay = !this.state.displaySearchBar;
 
@@ -122,12 +132,8 @@ export default class DiscoveriesScreen extends Component {
             <Content>
               <Header searchBar style={[(!this.state.displaySearchBar)?styles.hidden:'', styles.header]}>
                 <Item>
-                  <Icon name="search" />
                   <Input style={[styles.inputHeader]} placeholder="Rechercher" onChangeText={text => this.searchFilterFunction(text)} />
                 </Item>
-                {/* <Button transparent>
-                  <Text>Rechercher</Text>
-                </Button> */}
               </Header>
               <DiscoveriesComponent navigation={this.props.navigation} currentUserId={this.state.currentUserId} discoveries={this.state.discoveries} />
             </Content>

@@ -11,6 +11,7 @@ export default class DiscoveryScreen extends Component {
       };
     };
 
+    // Utilisation de isMounted pour éviter l'erreur "Can't call setState (or forceUpdate) on an unmounted component"
     _isMounted = false;
 
     constructor(props) {
@@ -29,14 +30,18 @@ export default class DiscoveryScreen extends Component {
     }
 
     componentDidMount() {
+      // isMounted à true pour notifier que le component est monté
       this._isMounted = true;
+
       this.getDiscovery();
     }
 
     componentWillUnmount() {
+      // isMounted à false pour notifier que le component est démonté
       this._isMounted = false;
     }
 
+    // Fonction qui récupère la discovery sur laquelle on à cliqué et qui vérifie quels boutons (favoris, upvote ou downvote) doivent rester cochés
     getDiscovery() {
 		  const { navigation } = this.props;
       const indexDiscovery = navigation.getParam('discoveryId');

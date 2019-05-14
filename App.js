@@ -5,7 +5,8 @@ import AppNavigator from './navigation/AppNavigator';
 import ApiKeys from './constants/ApiKeys';
 import * as firebase from 'firebase';
 
-// To hide the yellowbox
+// Caché la Yellobox 'Setting a timer' qui arrive car on utilise le skd web de firebase pour fonctionner
+// avec expo et ce sdk utilise les thread js et non les thread natifs
 import { YellowBox } from 'react-native';
 import _ from 'lodash';
 YellowBox.ignoreWarnings(['Setting a timer']);

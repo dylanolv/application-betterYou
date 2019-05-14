@@ -8,6 +8,7 @@ export default class AuthLoadingScreen extends React.Component {
         this._bootstrapAsync();
     }
 
+    // Si l'utilisateur n'est pas conneté on envoie à l'authentification sinon au main
     _bootstrapAsync = async () => {
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
