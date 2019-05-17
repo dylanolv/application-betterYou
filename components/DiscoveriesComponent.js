@@ -393,7 +393,7 @@ export default class DiscoveriesComponent extends Component {
                                 <Icon style={[styles.iconStar]} name={(this.state.tabStarSelected && this.state.tabStarSelected.includes(discovery.discoveryId))?'star':'star-outline'}/>
                             </TouchableOpacity>
                         </CardItem>
-                        <CardItem>
+                        <CardItem style={{justifyContent: 'center'}}>
                           <TouchableOpacity onPress={()=>this.goToDiscovery(discovery.discoveryId, discovery.category)}>
                             {/* uri pour récupèrer l'image de firebase storage via le lien stocké dans firebase database */}
                             <Image source={{ uri: discovery.image }} style={[styles.img]}/>
@@ -461,7 +461,8 @@ const styles = StyleSheet.create({
       resizeMode: 'cover', 
       height: 200, 
       width: 320,
-      alignSelf: 'center'
+      alignSelf: 'center',
+      justifyContent: 'center'
     },
     txt: {
     },

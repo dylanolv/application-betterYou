@@ -39,43 +39,6 @@ export default class LoginScreen extends Component {
           );
         });
     }
-
-	  // putUserInAsyncStorage = async () => {
-    //   try {
-    //     await AsyncStorage.setItem("userData", JSON.stringify(this.state.user));
-    //   } 
-    //   catch (error) {
-    //     console.log(error);
-    //   }
-    // }
-
-    // getUserInAsynStorage = async () => {
-    //   try {
-    //     const userData = await AsyncStorage.getItem('userData');
-    //     if (userData !== null) {
-    //       let user = JSON.parse(userData)
-
-    //       Object.keys(user).map(function(key) {
-    //         console.log(user.user.uid)
-    //       });
-    //     }
-    //     // AsyncStorage.clear()
-    //     // AsyncStorage.getAllKeys().then(async (keys) => {
-    //     //   AsyncStorage.multiGet(keys).then(async (result) => {
-    //     //     console.log('result :', result);
-    //     //   })
-    //     // })
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-
-    //   firebase.auth().onAuthStateChanged((user) => {
-    //     if (user) {
-    //       var uid = user.uid;
-    //       console.log(uid)
-    //     }
-    //   });
-    // };
   
     goToSignup() {
       this.setState({ email: "", password: "" })
